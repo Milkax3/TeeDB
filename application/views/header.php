@@ -12,7 +12,7 @@
        More info: h5bp.com/b/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title><?php echo (isset($title))? $tile : 'Set Title here.'; ?></title>
+  <title><?php echo (isset($title))? $title : 'Set Title here.'; ?></title>
   <meta name="description" content="Small description">
   <meta name="author" content="Name of Author">
 
