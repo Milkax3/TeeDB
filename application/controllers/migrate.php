@@ -9,10 +9,9 @@ class Migrate extends CI_Controller {
 	{
 		parent::__construct();
 		
+		//IMPORTATNT: Enable Migratetion in config file only if needed
+		//Set to false up after working.
 		$this->load->library('migration');
-
-		/** VERY IMPORTANT - only turn this on when you need it. */
-		show_error('Access to this controller is blocked, turn me on when you need me.');
 	}
 
 	// --------------------------------------------------------------------
@@ -26,7 +25,7 @@ class Migrate extends CI_Controller {
 	{
 		if ( ! $this->migration->current())
 		{
-			show_error($this->migration->error);
+			show_error($this->migration->error_string());
 			exit;
 		}
 
@@ -44,7 +43,7 @@ class Migrate extends CI_Controller {
 	{
 		if ( ! $this->migration->latest())
 		{
-			show_error($this->migration->error);
+			show_error($this->migration->error_string());
 			exit;
 		}
 
@@ -68,7 +67,7 @@ class Migrate extends CI_Controller {
 
 		if ( ! $this->migration->version($id))
 		{
-			show_error($this->migration->error);
+			show_error($this->migration->error_string());
 			exit;
 		}
 
