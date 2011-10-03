@@ -12,14 +12,19 @@
        More info: h5bp.com/b/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title><?php echo (isset($title))? $title : 'Set Title here.'; ?></title>
-  <meta name="description" content="Small description">
-  <meta name="author" content="Name of Author">
+  <title><?php echo (isset($title))? $title : 'Set title in config file.'; ?></title>
+  <meta name="description" content="<?php echo (isset($description))? $description : 'Set description in config file.'; ?>">
+  <meta name="author" content="<?php echo (isset($author))? $author : 'Set author in config file.'; ?>">
+  
+  <base href="<?php echo base_url(); ?>">
 
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
+  <link rel="alternate" type="application/rss+xml" href="feed/" title="RSS feed for TeeDB">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+  <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" type="image/x-icon" href="assets/apple-touch-icon.png">
 
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
