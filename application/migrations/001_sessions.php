@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Session extends CI_Migration {
+class Migration_Sessions extends CI_Migration {
 	
 	function up() 
 	{	
-		if ( ! $this->db->table_exists('session'))
+		if ( ! $this->db->table_exists('sessions'))
 		{
 			$this->dbforge->add_key('session_id', TRUE);
 			
@@ -16,12 +16,12 @@ class Migration_Session extends CI_Migration {
 				'user_data' => array('type' => 'TEXT', 'null' => FALSE, 'default' => '')
 			));
 
-			$this->dbforge->create_table('session', TRUE);
+			$this->dbforge->create_table('sessions', TRUE);
 		}
 	}
 
 	function down() 
 	{
-		$this->dbforge->drop_table('session');
+		$this->dbforge->drop_table('sessions');
 	}
 }

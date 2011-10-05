@@ -100,7 +100,7 @@ class MY_Upload extends CI_Upload {
 	 * @param	integer
 	 * @return	void
 	 */
-	public function set_min_height($n)
+	public function set_min_weight($n)
 	{
 		$this->min_weight = ((int) $n < 0) ? 0: (int) $n;
 	}
