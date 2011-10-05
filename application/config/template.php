@@ -9,7 +9,7 @@
 |
 */
 
-$template['theme'] = 'default';
+$template['theme'] = 'teedb';
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ $template['theme'] = 'default';
 |
 */
 
-$template['layouts'] = array();
+$template['layouts'] = array('nav');
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +33,9 @@ $template['layouts'] = array();
 |
 */
 
-$template['title'] = 'Title change in template config file';
-$template['author'] = 'Author change in template config file';
-$template['description'] = 'Description  hange in template config file';
+$template['title'] = 'TeeDB';
+$template['author'] = 'Andreas Gehle';
+$template['description'] = '';
 
 /*
 |--------------------------------------------------------------------------
