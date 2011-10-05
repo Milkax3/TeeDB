@@ -9,14 +9,14 @@
  * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @since		Version 2.1.0
  * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * MySQLi Database Adapter Class - MySQLi only works with PHP 5
+ * PDO Database Adapter Class
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the active record
@@ -28,16 +28,15 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/database/
  */
-class CI_DB_mysqli_driver extends CI_DB {
+class CI_DB_pdo_driver extends CI_DB {
 
-	var $dbdriver = 'mysqli';
+	var $dbdriver = 'pdo';
 
-	// The character used for escaping
-	var $_escape_char = '`';
-
-	// clause and character used for LIKE escape sequences - not used in MySQL
-	var $_like_escape_str = '';
-	var $_like_escape_chr = '';
+	// the character used to excape - not necessary for PDO
+	var $_escape_char = '';
+	var $_like_escape_str;
+	var $_like_escape_chr;
+	
 
 	/**
 	 * The syntax to count rows is slightly different across different
@@ -45,19 +44,35 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 * used for the count_all() and count_all_results() functions.
 	 */
 	var $_count_string = "SELECT COUNT(*) AS ";
-	var $_random_keyword = ' RAND()'; // database specific random keyword
+	var $_random_keyword;
 
-	/**
-	 * Whether to use the MySQL "delete hack" which allows the number
-	 * of affected rows to be shown. Uses a preg_replace when enabled,
-	 * adding a bit more processing to all queries.
-	 */
-	var $delete_hack = TRUE;
 
-	// whether SET NAMES must be used to set the character set
-	var $use_set_names;
+	function __construct($params)
+	{
+		parent::CI_DB($params);
+		
+		// clause and character used for LIKE escape sequences
+		if(strpos($this->hostname, 'mysql') !== FALSE)
+		{
+			$this->_like_escape_str = '';
+			$this->_like_escape_chr = '';
+		}
+		else if(strpos($this->hostname, 'odbc') !== FALSE)
+		{
+			$this->_like_escape_str = " {escape '%s'} ";
+			$this->_like_escape_chr = '!';
+		}
+		else
+		{
+			$this->_like_escape_str = " ESCAPE '%s' ";
+			$this->_like_escape_chr = '!';
+		}
+		
+		$this->hostname = $this->hostname . ";dbname=".$this->database;
+		$this->trans_enabled = FALSE;
 
-	// --------------------------------------------------------------------
+		$this->_random_keyword = ' RND('.time().')'; // database specific random keyword
+	}
 
 	/**
 	 * Non-persistent database connection
@@ -67,15 +82,9 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function db_connect()
 	{
-		if ($this->port != '')
-		{
-			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database, $this->port);
-		}
-		else
-		{
-			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
-		}
-
+		return new PDO($this->hostname,$this->username,$this->password, array(
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -88,7 +97,10 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function db_pconnect()
 	{
-		return $this->db_connect();
+		return new PDO($this->hostname,$this->username,$this->password, array(
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
+			PDO::ATTR_PERSISTENT => true
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -104,10 +116,11 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function reconnect()
 	{
-		if (mysqli_ping($this->conn_id) === FALSE)
+		if ($this->db->db_debug)
 		{
-			$this->conn_id = FALSE;
+			return $this->db->display_error('db_unsuported_feature');
 		}
+		return FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -120,7 +133,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function db_select()
 	{
-		return @mysqli_select_db($this->conn_id, $this->database);
+		// Not needed for PDO
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -128,16 +142,15 @@ class CI_DB_mysqli_driver extends CI_DB {
 	/**
 	 * Set client character set
 	 *
-	 * @access	private
+	 * @access	public
 	 * @param	string
 	 * @param	string
 	 * @return	resource
 	 */
-	function _db_set_charset($charset, $collation)
+	function db_set_charset($charset, $collation)
 	{
-		return function_exists('mysqli_set_charset')
-			? @mysqli_set_charset($this->conn_id, $charset)
-			: @mysqli_query($this->conn_id, "SET NAMES '".$this->escape_str($charset)."' COLLATE '".$this->escape_str($collation)."'");
+		// @todo - add support if needed
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -150,7 +163,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _version()
 	{
-		return "SELECT version() AS ver";
+		return $this->conn_id->getAttribute(PDO::ATTR_CLIENT_VERSION);
 	}
 
 	// --------------------------------------------------------------------
@@ -160,13 +173,16 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 *
 	 * @access	private called by the base class
 	 * @param	string	an SQL query
-	 * @return	resource
+	 * @return	object
 	 */
 	function _execute($sql)
 	{
 		$sql = $this->_prep_query($sql);
-		$result = @mysqli_query($this->conn_id, $sql);
-		return $result;
+		$result_id = $this->conn_id->query($sql);
+		
+		$this->affect_rows = $result_id->rowCount();
+		
+		return $result_id;
 	}
 
 	// --------------------------------------------------------------------
@@ -182,16 +198,6 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _prep_query($sql)
 	{
-		// "DELETE FROM TABLE" returns 0 affected rows This hack modifies
-		// the query so that it returns the number of affected rows
-		if ($this->delete_hack === TRUE)
-		{
-			if (preg_match('/^\s*DELETE\s+FROM\s+(\S+)\s*$/i', $sql))
-			{
-				$sql = preg_replace("/^\s*DELETE\s+FROM\s+(\S+)\s*$/", "DELETE FROM \\1 WHERE 1=1", $sql);
-			}
-		}
-
 		return $sql;
 	}
 
@@ -221,9 +227,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 		// even if the queries produce a successful result.
 		$this->_trans_failure = ($test_mode === TRUE) ? TRUE : FALSE;
 
-		$this->simple_query('SET AUTOCOMMIT=0');
-		$this->simple_query('START TRANSACTION'); // can also be BEGIN or BEGIN WORK
-		return TRUE;
+		return $this->conn_id->beginTransaction();
 	}
 
 	// --------------------------------------------------------------------
@@ -247,9 +251,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 			return TRUE;
 		}
 
-		$this->simple_query('COMMIT');
-		$this->simple_query('SET AUTOCOMMIT=1');
-		return TRUE;
+		$ret = $this->conn->commit();
+		return $ret;
 	}
 
 	// --------------------------------------------------------------------
@@ -273,9 +276,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 			return TRUE;
 		}
 
-		$this->simple_query('ROLLBACK');
-		$this->simple_query('SET AUTOCOMMIT=1');
-		return TRUE;
+		$ret = $this->conn_id->rollBack();
+		return $ret;
 	}
 
 	// --------------------------------------------------------------------
@@ -300,23 +302,15 @@ class CI_DB_mysqli_driver extends CI_DB {
 			return $str;
 		}
 
-		if (function_exists('mysqli_real_escape_string') AND is_object($this->conn_id))
-		{
-			$str = mysqli_real_escape_string($this->conn_id, $str);
-		}
-		elseif (function_exists('mysql_escape_string'))
-		{
-			$str = mysql_escape_string($str);
-		}
-		else
-		{
-			$str = addslashes($str);
-		}
+		// PDO doesn't require escaping
+		$str = remove_invisible_characters($str);
 
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
 		{
-			$str = str_replace(array('%', '_'), array('\\%', '\\_'), $str);
+			$str = str_replace(	array('%', '_', $this->_like_escape_chr),
+								array($this->_like_escape_chr.'%', $this->_like_escape_chr.'_', $this->_like_escape_chr.$this->_like_escape_chr),
+								$str);
 		}
 
 		return $str;
@@ -332,20 +326,20 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function affected_rows()
 	{
-		return @mysqli_affected_rows($this->conn_id);
+		return $this->affect_rows;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Insert ID
-	 *
+	 * 
 	 * @access	public
 	 * @return	integer
 	 */
-	function insert_id()
+	function insert_id($name=NULL)
 	{
-		return @mysqli_insert_id($this->conn_id);
+		return $this->conn_id->lastInsertId($name);
 	}
 
 	// --------------------------------------------------------------------
@@ -382,7 +376,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * List table query
+	 * Show table query
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -392,11 +386,12 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _list_tables($prefix_limit = FALSE)
 	{
-		$sql = "SHOW TABLES FROM ".$this->_escape_char.$this->database.$this->_escape_char;
+		$sql = "SHOW TABLES FROM `".$this->database."`";
 
 		if ($prefix_limit !== FALSE AND $this->dbprefix != '')
 		{
-			$sql .= " LIKE '".$this->escape_like_str($this->dbprefix)."%'";
+			//$sql .= " LIKE '".$this->escape_like_str($this->dbprefix)."%' ".sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			return FALSE; // not currently supported
 		}
 
 		return $sql;
@@ -415,7 +410,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _list_columns($table = '')
 	{
-		return "SHOW COLUMNS FROM ".$this->_protect_identifiers($table, TRUE, NULL, FALSE);
+		return "SHOW COLUMNS FROM ".$table;
 	}
 
 	// --------------------------------------------------------------------
@@ -431,7 +426,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _field_data($table)
 	{
-		return "DESCRIBE ".$table;
+		return "SELECT TOP 1 FROM ".$table;
 	}
 
 	// --------------------------------------------------------------------
@@ -444,7 +439,8 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _error_message()
 	{
-		return mysqli_error($this->conn_id);
+		$error_array = $this->conn_id->errorInfo();
+		return $error_array[2];
 	}
 
 	// --------------------------------------------------------------------
@@ -457,7 +453,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _error_number()
 	{
-		return mysqli_errno($this->conn_id);
+		return $this->conn_id->errorCode();
 	}
 
 	// --------------------------------------------------------------------
@@ -492,6 +488,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 		if (strpos($item, '.') !== FALSE)
 		{
 			$str = $this->_escape_char.str_replace('.', $this->_escape_char.'.'.$this->_escape_char, $item).$this->_escape_char;
+			
 		}
 		else
 		{
@@ -521,7 +518,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 			$tables = array($tables);
 		}
 
-		return '('.implode(', ', $tables).')';
+		return (count($tables) == 1) ? $tables[0] : '('.implode(', ', $tables).')';
 	}
 
 	// --------------------------------------------------------------------
@@ -540,24 +537,6 @@ class CI_DB_mysqli_driver extends CI_DB {
 	function _insert($table, $keys, $values)
 	{
 		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Insert_batch statement
-	 *
-	 * Generates a platform-specific insert string from the supplied data
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @param	array	the insert keys
-	 * @param	array	the insert values
-	 * @return	string
-	 */
-	function _insert_batch($table, $keys, $values)
-	{
-		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES ".implode(', ', $values);
 	}
 
 	// --------------------------------------------------------------------
@@ -595,57 +574,6 @@ class CI_DB_mysqli_driver extends CI_DB {
 		return $sql;
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Update_Batch statement
-	 *
-	 * Generates a platform-specific batch update string from the supplied data
-	 *
-	 * @access	public
-	 * @param	string	the table name
-	 * @param	array	the update data
-	 * @param	array	the where clause
-	 * @return	string
-	 */
-	function _update_batch($table, $values, $index, $where = NULL)
-	{
-		$ids = array();
-		$where = ($where != '' AND count($where) >=1) ? implode(" ", $where).' AND ' : '';
-
-		foreach ($values as $key => $val)
-		{
-			$ids[] = $val[$index];
-
-			foreach (array_keys($val) as $field)
-			{
-				if ($field != $index)
-				{
-					$final[$field][] =  'WHEN '.$index.' = '.$val[$index].' THEN '.$val[$field];
-				}
-			}
-		}
-
-		$sql = "UPDATE ".$table." SET ";
-		$cases = '';
-
-		foreach ($final as $k => $v)
-		{
-			$cases .= $k.' = CASE '."\n";
-			foreach ($v as $row)
-			{
-				$cases .= $row."\n";
-			}
-
-			$cases .= 'ELSE '.$k.' END, ';
-		}
-
-		$sql .= substr($cases, 0, -2);
-
-		$sql .= ' WHERE '.$where.$index.' IN ('.implode(',', $ids).')';
-
-		return $sql;
-	}
 
 	// --------------------------------------------------------------------
 
@@ -662,7 +590,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _truncate($table)
 	{
-		return "TRUNCATE ".$table;
+		return $this->_delete($table);
 	}
 
 	// --------------------------------------------------------------------
@@ -714,14 +642,30 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _limit($sql, $limit, $offset)
 	{
-		$sql .= "LIMIT ".$limit;
-
-		if ($offset > 0)
+		if(strpos($this->hostname, 'cubrid') !== FALSE || strpos($this->hostname, 'sqlite') !== FALSE)
 		{
-			$sql .= " OFFSET ".$offset;
-		}
+			if ($offset == 0)
+			{
+				$offset = '';
+			}
+			else
+			{
+				$offset .= ", ";
+			}
 
-		return $sql;
+			return $sql."LIMIT ".$offset.$limit;
+		}
+		else
+		{
+			$sql .= "LIMIT ".$limit;
+
+			if ($offset > 0)
+			{
+				$sql .= " OFFSET ".$offset;
+			}
+			
+			return $sql;
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -735,12 +679,13 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	function _close($conn_id)
 	{
-		@mysqli_close($conn_id);
+		$this->conn_id = null;
 	}
 
 
 }
 
 
-/* End of file mysqli_driver.php */
-/* Location: ./system/database/drivers/mysqli/mysqli_driver.php */
+
+/* End of file pdo_driver.php */
+/* Location: ./system/database/drivers/pdo/pdo_driver.php */
