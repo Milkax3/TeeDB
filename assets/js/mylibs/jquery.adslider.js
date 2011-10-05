@@ -15,8 +15,8 @@ div#AdContent:
  */
 function adslider(max){   
     var path, prev, next, links, images;
-   	path = "images/slider/";
-   	links = new Array('news.teesites.net', 'www.teeworlds.com', 'news.teesites.net/teewit', 'teewiki.info');
+   	path = "assets/images/slider/";
+   	links = new Array('news.teesites.net', 'www.teeworlds.com', 'teewit.teesites.net', 'teewiki.info');
    	images = new Array('Teeplanet.jpg', 'Teeworlds.jpg', 'Teewit.jpg', 'Teewiki.jpg');
 
    	//init and error handling:
@@ -39,23 +39,23 @@ function adslider(max){
    	next = max+1;
    	
    	//Build html
-   	$('div#AdContent').html('<div class="Box" id="s0" style="display:none;"><div class="slider'+links.length+'" style="background: url('+path+images[links.length-1]+') no-repeat"><a target="_blank" href="http://'+links[links.length-1]+'"></a></div></div>');
+   	$('div#slider_content').html('<div class="box" id="s0" style="display:none;"><div class="slider'+links.length+'" style="background: url('+path+images[links.length-1]+') no-repeat"><a target="_blank" href="http://'+links[links.length-1]+'"></a></div></div>');
    	for(i=1;i<=max;i++){
-   		$('div#AdContent').append('<div class="Box" id="s'+i+'"><div class="slider'+i+'" style="background: url('+path+images[i-1]+') no-repeat"><a target="_blank" href="http://'+links[i-1]+'"></a></div></div>');
+   		$('div#slider_content').append('<div class="box" id="s'+i+'"><div class="slider'+i+'" style="background: url('+path+images[i-1]+') no-repeat"><a target="_blank" href="http://'+links[i-1]+'"></a></div></div>');
    	}
    	if(max+1>links.length)
    		last = 0;
    	else
    		last = max+1;
-	$('div#AdContent').append('<div class="Box" id="s'+next+'" style="display:none;"><div class="slider'+(max+1)+'" style="background: url('+path+images[last]+') no-repeat"><a target="_blank" href="http://'+links[last]+'"></a></div></div>');
+	$('div#slider_content').append('<div class="box" id="s'+next+'" style="display:none;"><div class="slider'+(max+1)+'" style="background: url('+path+images[last]+') no-repeat"><a target="_blank" href="http://'+links[last]+'"></a></div></div>');
 
 	//Events
-	$('#ArrowLeft').click(function(){left();});	
-	$('#ArrowRight').click(function(){right();});
+	$('#arrow_left').click(function(){left();});	
+	$('#arrow_right').click(function(){right();});
 	
 	function left(){
-		$('#ArrowRight').unbind();
-		$('#ArrowLeft').unbind();
+		$('#arrow_right').unbind();
+		$('#arrow_left').unbind();
 		
 		$('#s'+next).show('slow', function() {
 			slider = $(this).find('div').attr('class');
@@ -68,10 +68,10 @@ function adslider(max){
 				image = sliderNr-1;
 			}
 			next++;
-			$('div#AdContent').append('<div class="Box" id="s'+next+'" style="display:none;"><div class="slider'+sliderNr+'" style="background: url('+path+images[image]+') no-repeat"><a target="_blank" href="http://'+links[image]+'"></a></div></div>');
+			$('div#slider_content').append('<div class="box" id="s'+next+'" style="display:none;"><div class="slider'+sliderNr+'" style="background: url('+path+images[image]+') no-repeat"><a target="_blank" href="http://'+links[image]+'"></a></div></div>');
 
-			$('#ArrowLeft').click(function(){left();});	
-			$('#ArrowRight').click(function(){right();});
+			$('#arrow_left').click(function(){left();});	
+			$('#arrow_right').click(function(){right();});
 		});
 		
 		$('#s'+(prev+1)).hide('slow', function() {
@@ -81,8 +81,8 @@ function adslider(max){
 	}
 	
 	function right(){
-		$('#ArrowRight').unbind();
-		$('#ArrowLeft').unbind();
+		$('#arrow_right').unbind();
+		$('#arrow_left').unbind();
 		
 		$('#s'+prev).show('slow', function() {
 			slider = $(this).find('div').attr('class');
@@ -98,10 +98,10 @@ function adslider(max){
 					image = sliderNr-1;					
 			}
 			prev--;
-			$('div#AdContent').prepend('<div class="Box" id="s'+prev+'" style="display:none;"><div class="slider'+sliderNr+'" style="background: url('+path+images[image]+') no-repeat"><a target="_blank" href="http://'+links[image]+'"></a></div></div>');
+			$('div#slider_content').prepend('<div class="box" id="s'+prev+'" style="display:none;"><div class="slider'+sliderNr+'" style="background: url('+path+images[image]+') no-repeat"><a target="_blank" href="http://'+links[image]+'"></a></div></div>');
 			
-			$('#ArrowLeft').click(function(){left();});	
-			$('#ArrowRight').click(function(){right();});
+			$('#arrow_left').click(function(){left();});	
+			$('#arrow_right').click(function(){right();});
 		});
 		
 		$('#s'+(next-1)).hide('slow', function() {
