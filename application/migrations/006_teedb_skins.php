@@ -1,10 +1,25 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Migration_TeeDB_Demo extends CI_Migration {
+/**
+ * TeeDB Skins Migration
+ *
+ * @package		Application
+ * @subpackage	Migrations
+ * @category	Migrations
+ * @author		Andreas Gehle
+ */
+class Migration_TeeDB_Skins extends CI_Migration {
 	
+	/**
+	 * Name of the table
+	 */	
+	const TABLE = 'teedb_skins';
+	
+	/**
+	 * Build table up
+	 */	
 	function up() 
 	{	
-		if ( ! $this->db->table_exists('teedb_demo'))
+		if ( ! $this->db->table_exists(self::TABLE))
 		{
 			// Setup Keys
 			$this->dbforge->add_key('id', TRUE);
@@ -21,12 +36,18 @@ class Migration_TeeDB_Demo extends CI_Migration {
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
 
-			$this->dbforge->create_table('teedb_demo', TRUE);
+			$this->dbforge->create_table(self::TABLE, TRUE);
 		}
 	}
 
+	/**
+	 * Build table down
+	 */
 	function down() 
 	{
-		$this->dbforge->drop_table('teedb_demo');
+		$this->dbforge->drop_table(self::TABLE);
 	}
 }
+
+/* End of file 006_teedb_skins.php */
+/* Location: ./application/migrations/006_teedb_skins.php */

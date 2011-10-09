@@ -1,18 +1,18 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * TeeDB Mapres Migration
+ * User Confirm Migration
  *
  * @package		Application
  * @subpackage	Migrations
  * @category	Migrations
  * @author		Andreas Gehle
  */
-class Migration_TeeDB_Mapres extends CI_Migration {
+class Migration_User_Confirms extends CI_Migration {
 	
 	/**
 	 * Name of the table
 	 */	
-	const TABLE = 'teedb_mapres';
+	const TABLE = 'user_confirms';
 	
 	/**
 	 * Build table up
@@ -23,15 +23,14 @@ class Migration_TeeDB_Mapres extends CI_Migration {
 		{
 			// Setup Keys
 			$this->dbforge->add_key('id', TRUE);
-			$this->dbforge->add_key('user_id');
-			$this->dbforge->add_field("UNIQUE KEY `name` (`name`)");
+			$this->dbforge->add_field("KEY `user_id` (`user_id`)");
+			$this->dbforge->add_field("UNIQUE KEY `link` (`link`)");
 			
 			$this->dbforge->add_field(array(
 				'id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE),
-				'name' => array('type' => 'VARCHAR', 'constraint' => '255', 'null' => FALSE),
 				'user_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
-				'discription' => array('type' => 'TEXT', 'null' => FALSE),
-				'downloads' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
+				'link' => array('type' => 'VARCHAR', 'constraint' => '32', 'null' => FALSE),
+				'password' => array('type' => 'VARCHAR', 'constraint' => '40', 'null' => TRUE, 'default' => NULL),
 				'update' => array('type' => 'DATETIME', 'null' => FALSE),
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
@@ -49,5 +48,5 @@ class Migration_TeeDB_Mapres extends CI_Migration {
 	}
 }
 
-/* End of file 008_teedb_mapres.php */
-/* Location: ./application/migrations/008_teedb_mapres.php */
+/* End of file 003_user_confirms.php */
+/* Location: ./application/migrations/003_user_confirms.php */

@@ -1,10 +1,25 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Migration_Comment extends CI_Migration {
+/**
+ * Comments Migration
+ *
+ * @package		Application
+ * @subpackage	Migrations
+ * @category	Migrations
+ * @author		Andreas Gehle
+ */
+class Migration_Comments extends CI_Migration {
 	
+	/**
+	 * Name of the table
+	 */	
+	const TABLE = 'comments';
+	
+	/**
+	 * Build table up
+	 */	
 	function up() 
 	{	
-		if ( ! $this->db->table_exists('comment'))
+		if ( ! $this->db->table_exists(self::TABLE))
 		{
 			// Setup Keys
 			$this->dbforge->add_key('id', TRUE);
@@ -20,12 +35,18 @@ class Migration_Comment extends CI_Migration {
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
 
-			$this->dbforge->create_table('comment', TRUE);
+			$this->dbforge->create_table(self::TABLE, TRUE);
 		}
 	}
 
+	/**
+	 * Build table down
+	 */
 	function down() 
 	{
-		$this->dbforge->drop_table('comment');
+		$this->dbforge->drop_table(self::TABLE);
 	}
 }
+
+/* End of file 005_comments.php */
+/* Location: ./application/migrations/005_comments.php */

@@ -1,10 +1,25 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Migration_Blog extends CI_Migration {
+/**
+ * News Migration
+ *
+ * @package		Application
+ * @subpackage	Migrations
+ * @category	Migrations
+ * @author		Andreas Gehle
+ */
+class Migration_News extends CI_Migration {
 	
+	/**
+	 * Name of the table
+	 */	
+	const TABLE = 'news';
+	
+	/**
+	 * Build table up
+	 */	
 	function up() 
 	{	
-		if ( ! $this->db->table_exists('blog'))
+		if ( ! $this->db->table_exists(self::TABLE))
 		{
 			// Setup Keys
 			$this->dbforge->add_key('id', TRUE);
@@ -20,12 +35,18 @@ class Migration_Blog extends CI_Migration {
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
 
-			$this->dbforge->create_table('blog', TRUE);
+			$this->dbforge->create_table(self::TABLE, TRUE);
 		}
 	}
 
+	/**
+	 * Build table down
+	 */
 	function down() 
 	{
-		$this->dbforge->drop_table('blog');
+		$this->dbforge->drop_table(self::TABLE);
 	}
 }
+
+/* End of file 004_news.php */
+/* Location: ./application/migrations/004_news.php */
