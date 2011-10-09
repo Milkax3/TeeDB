@@ -46,7 +46,7 @@
 							<?php echo anchor('user/logout','Logout'); ?>
 						</p>
 					<?php else: ?>
-						<?php echo form_open('user/login/submit'); ?>
+						<?php echo form_open('user/login'); ?>
 							<p>
 								<label for="username">Username:</label><br />
 								<?php echo form_input('username',set_value('username'),'id="loginName"'); ?>
