@@ -66,12 +66,24 @@ a:hover{
 	border-color: #A16E36;
 }
 
-.error{
-	color: #FFC96C;
+.error, .success, .info{
 	background-color: #4C3922;
 	border-color: #4C3922;
 	margin-bottom: 10px;
 	margin: 2px 0;
+	padding: 2px;
+}
+
+.error{
+	color: #DB4A37;
+}
+
+.success{
+	color: #42B449;
+}
+
+.info{
+	color: #7090C8;
 }
 
 .border{
@@ -456,7 +468,7 @@ footer#main p{
 }
 
 #infobox .col3{
-	width: 281px;
+	width: 261px;
 	padding: 10px;
 }
 
@@ -480,11 +492,11 @@ footer#main p{
  */
 
 .button, textarea, input, select{
-	background: #5B432A;
+	background: #5B432A !important;
 	color: #A16E36;	
 	margin: 1px;
 	padding: 3px;
-	border: 3px solid #825A26;
+	border: 3px solid #825A26 !important;
 	border-radius: 6px;	
 	-moz-border-radius: 6px; 
 	-webkit-border-radius: 6px; 
@@ -501,7 +513,7 @@ footer#main p{
 
 
 .button:hover, input[type=submit]:hover{
-	background: #4C3922;
+	background: #4C3922 !important;
 	cursor: pointer;
 }
 
@@ -521,7 +533,7 @@ input:focus, textarea:focus, label:focus{
  * 	Icons
  */
 
-li span.icon {
+span.icon {
 	background-image: url(../images/icons.png);
 	
 	display: inline-block;
