@@ -20,7 +20,7 @@ class MY_Form_validation extends CI_Form_validation {
 	public function unique($str, $params)
 	{
 		$this->CI->load->database();
-		$this->CI->form_validation->set_message('unique', 'The %s is already being used.');
+		$this->CI->form_validation->set_message('unique', 'The %s is already in use.');
 
 		list($table, $field) = explode(".", $params, 2);
 
@@ -35,6 +35,22 @@ class MY_Form_validation extends CI_Form_validation {
 			return TRUE;
 		}
 
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Exist in table
+	 * 
+	 * @access	public
+	 * @param	string
+	 * @param	string	Must be in the format Table.column
+	 * @return	bool
+	 */
+	public function exist($str, $params)
+	{
+		$this->CI->form_validation->set_message('exist', 'The %s doesnt belong to any account.');
+		return !$this->unique($str, $params);
 	}
 
 	// --------------------------------------------------------------------
