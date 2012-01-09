@@ -61,7 +61,7 @@ class Skin_preview {
 		$this->name = pathinfo($file, PATHINFO_FILENAME);
 		
 		//load the skin file
-		if(!$src = imagecreatefrompng($this->CI->config->item('upload_path_skins').'/'.$file))
+		if(!$src = @imagecreatefrompng($this->CI->config->item('upload_path_skins').'/'.$file))
 		{
 			return FALSE;
 		}
