@@ -25,7 +25,7 @@ function navOpen(){
 		}
 	});
 
-   	menuMain = $(this).css('width', '306px');
+   	//menuMain = $(this).css('width', '306px');
    	menuItem = $(this).find('ul').css('visibility', 'visible');
    	$(this).find('ul').css('width', '');
 }
@@ -34,7 +34,7 @@ function navClose(){
 	if(menuItem) {
 		menuItem.css('visibility', 'hidden');
 		menuItem.css('width', '0px');
-		menuMain.css('width', '');
+		//menuMain.css('width', '');
 	}
 }
 

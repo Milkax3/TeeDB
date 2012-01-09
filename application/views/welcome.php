@@ -111,7 +111,7 @@
 				
 				<h4>Database:</h4>
 				<?php
-					$width = 180;
+					$width = 178;
 					$min = 20;
 					$sum = $stats->teedb_demos + $stats->teedb_gameskins + $stats->teedb_mapres + $stats->teedb_maps + $stats->teedb_mods + $stats->teedb_skins;
 				?>
@@ -167,7 +167,7 @@
 		<p>
 			<b>Last-User:</b> 
 			<?php if(isset($last_user) and $last_user): ?>
-			<?php echo anchor('/profile/name/'.$last_user->name,$last_user->name).' ('.datetime_to_human($last_user->update).')'; ?><br>
+			<?php echo anchor('/profile/name/'.$last_user->name ,$last_user->name, 'class="none solid"').' ('.datetime_to_human($last_user->create).')'; ?><br>
 			<?php else: ?>
 			No user signup, yet.<br />
 	   		<?php endif; ?>
