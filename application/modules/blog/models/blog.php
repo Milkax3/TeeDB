@@ -33,7 +33,7 @@ class Blog extends CI_Model{
 	public function get_latest($limit=5)
 	{
 		$query = $this->db
-		->select('title, content, name, news.create, COUNT('.$this->db->dbprefix(Comment::TABLE).'.id) AS count_comment')
+		->select('title, content, name, news.create, COUNT(comment.id) AS count_comment')
 		->from(self::TABLE.' as news')
 		->join(User::TABLE.' as user', 'news.user_id = user.id')
 		->join(Comment::TABLE.' as comment', 'news.id = comment.type_id AND comment.type = "blog"', 'left')

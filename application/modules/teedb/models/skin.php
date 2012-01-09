@@ -19,7 +19,7 @@ class Skin extends CI_Model {
         parent::__construct();
 		
 		$this->load->database();
-		$this->load->model(array('user', 'rate'));
+		$this->load->model(array('user', 'teedb/rate'));
 	}
 
 	// --------------------------------------------------------------------
@@ -46,7 +46,13 @@ class Skin extends CI_Model {
 	public function get_random()
 	{
 		//rand better performance as rand()
-		$random = mt_rand(0, $this->count_skins()-1);
+		$count = $this->count_skins();
+		if($count<=0)
+		{
+			return FALSE;
+		}
+		
+		$random = mt_rand(0, $count-1);
 		
 		$query = $this->db
 		->select('name')
