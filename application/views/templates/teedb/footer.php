@@ -23,20 +23,21 @@
 	<!-- JavaScript at the bottom for fast page loading -->
 
  	<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
- 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="assets/js/libs/jquery-1.6.4.min.js"><\/script>')</script>
+ 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="assets/js/libs/jquery-1.7.min.js"><\/script>')</script>
 
 
  	<!-- scripts concatenated and minified via ant build script-->
  	<script defer src="assets/js/libs/jquery-ui-1.8.16.min.js"></script>
  	<script defer src="assets/js/plugins.js"></script>
  	<script defer src="assets/js/mylibs/jquery.adslider.js"></script>
- 	<script defer src="assets/js/mylibs/jquery.fileinput.js"></script>
+ 	<script defer src="assets/js/mylibs/fileuploader.js"></script>
  	<script defer src="assets/js/mylibs/jquery.form.js"></script>
 	<script defer src="assets/js/mylibs/jquery.nav.js"></script>
   	<script defer src="assets/js/script.js"></script>
   	<!-- end scripts-->
-
+  	
+	<?php if(isset($jquery) && $jquery) echo'<script>'.$jquery.'</script>'; ?>
 	
 	<!-- Change UA-XXXXX-X to be your site's ID -->
 	<script>
