@@ -9,7 +9,7 @@ class Login extends CI_Controller {
 	{
 		parent::__construct();
 		
-		$this->load->library(array('form_validation', 'auth'));
+		$this->load->library(array('form_validation', 'user/auth'));
 	}
 
 	public function index()

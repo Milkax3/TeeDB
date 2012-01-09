@@ -7,7 +7,7 @@
  * @category	Model
  * @author		Andreas Gehle
  */
-class User extends CI_Model {
+class Confirm extends CI_Model {
 	
 	const TABLE = 'user_confirms';
 	

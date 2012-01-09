@@ -6,7 +6,7 @@ class Signup extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->library(array('form_validation', 'auth', 'email'));
-		$this->load->model('user');
+		$this->load->model(array('user','confirm'));
 		
 		$this->config->load('user');
 	}
@@ -96,10 +96,10 @@ class Signup extends CI_Controller {
 	private function _submit_validate()
 	{
 		// validation rules
-		$this->form_validation->set_rules('username', 'username', 'callback__not_logged_in|required|alpha_numeric|min_length[3]|max_length[12]|unique[User.name]');
+		$this->form_validation->set_rules('username', 'username', 'callback__not_logged_in|required|alpha_numeric|min_length[3]|max_length[12]|unique[users.name]');
 		$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[12]');
 		$this->form_validation->set_rules('passconf', 'confirm password', 'required|matches[password]');
-		$this->form_validation->set_rules('email', 'email', 'required|valid_email|unique[User.email]');
+		$this->form_validation->set_rules('email', 'email', 'required|valid_email|unique[users.email]');
 
 		return $this->form_validation->run();
 	}

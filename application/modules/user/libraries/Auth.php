@@ -27,7 +27,7 @@ class Auth {
 		$this->CI =& get_instance();
 
 		// Load additional libraries, helpers, etc.
-		$this->CI->load->library('session');
+		$this->CI->load->library(array('session','user_agent'));
 		$this->CI->load->helper('url');
 		$this->CI->load->model('user/user');
 		
@@ -94,25 +94,10 @@ class Auth {
 	 * @param	boolean	if the page is viewable when logged in
 	 * @return	void
 	 */
-	public function restrict($logged_out = FALSE)
+	public function restrict()
 	{
-		// If the user is logged in and he's trying to access a page
-		// he's not allowed to see when logged in,
-		// redirect him to the index!
-		if ($logged_out && $this->logged_in())
-		{
-			redirect($this->index_redirect);
-		}
-
-		// If the user isn' logged in and he's trying to access a page
-		// he's not allowed to see when logged out,
-		// redirect him to the login page!
-		if ( ! $logged_out && ! $this->logged_in())
-		{
-			// We'll use this in our redirect method.
-			$this->CI->session->set_userdata('redirected_from', $this->CI->uri->uri_string()); 
-			redirect($this->login_redirect);
-		}
+		//$this->CI->session->set_userdata('redirected_from', $this->CI->uri->uri_string()); 
+		redirect($this->CI->agent->referrer());
 	}
 
 	// --------------------------------------------------------------------
@@ -126,7 +111,7 @@ class Auth {
 	 */
 	public function login()
 	{
-		self::$user_id = $this->user->login(
+		self::$user_id = $this->CI->user->login(
 			$this->CI->input->post('username'), 
 			$this->get_hash($this->CI->input->post('password'))
 		);
@@ -134,8 +119,8 @@ class Auth {
 		if(self::$user_id > 0)
 		{
 			$this->CI->session->set_userdata('user_id', self::$user_id);
-			self::$user_name = $this->input->post('username');
-			$this->redirect();
+			self::$user_name = $this->CI->input->post('username');
+			$this->restrict();
 			return TRUE;
 		}
 		
@@ -194,7 +179,7 @@ class Auth {
 			return self::$user_name;
 		}
 		
-		self::$user_name = $this->user->get_name(self::$user_id);
+		self::$user_name = $this->CI->user->get_name(self::$user_id);
 			
 		if(self::$user_name != '')
 		{
@@ -234,7 +219,7 @@ class Auth {
 		$this->CI->session->set_userdata('user_id', '');
 		$this->CI->session->set_userdata('redirected_from', '');
 		$this->CI->session->sess_destroy();
-		redirect($this->index_redirect);
+		$this->restrict();
 	}
 
 	// --------------------------------------------------------------------

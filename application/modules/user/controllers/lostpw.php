@@ -68,7 +68,7 @@ class LostPw extends CI_Controller {
 
 	private function _submit_validate()
 	{
-		$this->form_validation->set_rules('email', 'email', 'callback__not_logged_in|callback__status|required|valid_email|exist[User.email]');
+		$this->form_validation->set_rules('email', 'email', 'callback__not_logged_in|callback__status|required|valid_email|exist[users.email]');
 		$this->form_validation->set_message('authenticate','Invalid login. Please try again.');
 
 		return $this->form_validation->run();
