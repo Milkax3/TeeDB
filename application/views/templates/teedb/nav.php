@@ -14,14 +14,14 @@
 			<li><?php echo anchor('about','about'); ?></li>
 		</ul>
 		
-		<?php if(isset($randomtee) && $randomtee): ?>
-			<div id="randomtee">
+		<div id="randomtee">
+			<?php if(isset($randomtee) && $randomtee): ?>
 				<?php echo anchor('teedb/skin/'.$randomtee->name, $randomtee->name, 'class="none solid"'); ?><br />
-				<img src="uploads/skin/preview/<?php echo $randomtee->name.'.png'; ?>" alt="RandomTee">
-			</div>
-			<a type="application/rss+xml" href="feed/" id="rss" class="none"></a>
-			<div id="butterfly"></div>
-		<?php endif; ?>
+				<img src="uploads/skins/previews/<?php echo $randomtee->name.'.png'; ?>" alt="RandomTee">
+			<?php endif; ?>
+		</div>
+		<a type="application/rss+xml" href="feed/" id="rss" class="none"></a>
+		<div id="butterfly"></div>
 		
 	</header>
 </div>
@@ -35,17 +35,25 @@
 		<li><?php echo anchor('teedb/mods','Mods'); ?></li>
 		<li><?php echo anchor('teedb/skins','Skins'); ?></li>
 		
-		<li class="right">
-			<div class="dropdown right"><?php echo anchor('user/login','Login', 'class="select"'); ?></div>
-			<ul style="width: 0px">
-				<li>
-					<?php if($this->auth != NULL && $this->auth->logged_in()): ?>
-						<p>Hello <?php echo $this->auth->get_username(); ?>.</p>
-						<br />
-							<?php echo anchor('user/edit','Edit profile'); ?><br />
+		<li class="right" style="width: 306px">
+			<?php if($this->auth != NULL && $this->auth->logged_in()): ?>
+				<div class="dropdown right"><?php echo anchor('user/login',$this->auth->get_name(), 'class="select"'); ?></div>
+				<ul style="width: 0px">
+					<li>
+						<p>What would you like to do?</p>
+							<br />
+							<?php echo anchor('teedb/upload/','Upload'); ?>
+							<br /><br />
+							<?php echo anchor('user/edit','Edit profile'); ?>
+							<br /><br />
 							<?php echo anchor('user/logout','Logout'); ?>
 						</p>
-					<?php else: ?>
+					</li>
+				</ul>
+			<?php else: ?>
+				<div class="dropdown right"><?php echo anchor('user/login','Login', 'class="select"'); ?></div>
+				<ul style="width: 0px">
+					<li>
 						<?php echo form_open('user/login'); ?>
 							<p>
 								<label for="username">Username:</label><br />
@@ -61,9 +69,9 @@
 								<?php echo anchor('user/lostpw','Forgot password?'); ?>
 							</p>	
 						<?php echo form_close(); ?>	
-					<?php endif; ?>
-				</li>
-			</ul>
+					</li>
+				</ul>
+			<?php endif; ?>
 		</li>
 		
 	</ul>
