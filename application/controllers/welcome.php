@@ -43,6 +43,8 @@ class Welcome extends CI_Controller {
 		$data['news_titles'] = $this->blog->get_latest_titles();
 		$data['news'] = $this->blog->get_latest(1);
 		$data['stats'] = $this->common->get_stats();
+		$data['last_user'] = $this->user->get_last_user();
+		$data['last'] = $this->common->getLastTeeDBEntries();
 		
 		$this->template->set_layout_data('nav', array('large' => TRUE, 'randomtee' => $this->skin->get_random()));
 		$this->template->view('welcome', $data);

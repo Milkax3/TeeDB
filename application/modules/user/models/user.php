@@ -212,7 +212,7 @@ class User extends CI_Model {
 	public function get_last_user()
 	{
 		$query = $this->db
-		->select('name')
+		->select('name, create')
 		->order_by('create DESC')
 		->limit(1)
 		->get(self::TABLE);
