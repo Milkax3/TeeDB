@@ -1,11 +1,11 @@
 <aside>	
 	<h2>Sorted by...</h2>
 	<ul>
-		<li><?php echo ($order=='new' and $direction=='desc')? anchor('teedb/skins/new/asc', 'Newest') : anchor('teedb/skins/new/desc', 'Newest'); ?></li>
-		<li><?php echo ($order=='rate' and $direction=='desc')? anchor('teedb/skins/rate/asc', 'Rating') : anchor('teedb/skins/rate/desc', 'Rating'); ?></li>
-		<li><?php echo ($order=='dw' and $direction=='desc')? anchor('teedb/skins/dw/asc', 'Downloads') : anchor('teedb/skins/dw/desc', 'Downloads'); ?></li>
-		<li><?php echo ($order=='name' and $direction=='asc')? anchor('teedb/skins/name/desc', 'Name') : anchor('teedb/skins/name/asc', 'Name'); ?></li>
-		<li><?php echo ($order=='author' and $direction=='asc')? anchor('teedb/skins/author/desc', 'Author') : anchor('teedb/skins/author/asc', 'Author'); ?></li>
+		<li><?php echo ($order=='new' and $direction=='desc')? anchor('teedb/skins/index/new/asc', 'Newest') : anchor('teedb/skins/index/new/desc', 'Newest'); ?></li>
+		<li><?php echo ($order=='rate' and $direction=='desc')? anchor('teedb/skins/index/rate/asc', 'Rating') : anchor('teedb/skins/index/rate/desc', 'Rating'); ?></li>
+		<li><?php echo ($order=='dw' and $direction=='desc')? anchor('teedb/skins/index/dw/asc', 'Downloads') : anchor('teedb/skins/index/dw/desc', 'Downloads'); ?></li>
+		<li><?php echo ($order=='name' and $direction=='asc')? anchor('teedb/skins/index/name/desc', 'Name') : anchor('teedb/skins/index/name/asc', 'Name'); ?></li>
+		<li><?php echo ($order=='author' and $direction=='asc')? anchor('teedb/skins/index/author/desc', 'Author') : anchor('teedb/skins/index/author/asc', 'Author'); ?></li>
 	</ul>
 	<br style="clear:both;" />
 	<div style="text-align: center;margin-top:20px">
@@ -36,10 +36,10 @@
 						</p>
 						<br class="clear" />
 						<div class="rate">
-							<div class="like" style="width: <?php echo 104*rateFormat($entry->rate_sum, $entry->rate_count)+50; ?>px">
+							<div class="like" style="color: #3B2B1C; width: <?php echo 104*rateFormat($entry->rate_sum, $entry->rate_count)+50; ?>px">
 								<?php echo rateFormat($entry->rate_sum, $entry->rate_count)*10+234; ?>
 							</div>
-							<div class="dislike" style="width: <?php echo 104*rateFormat($entry->rate_sum, $entry->rate_count)+50; ?>px">
+							<div class="dislike" style="color: #FFC96C; width: <?php echo 104*rateFormat($entry->rate_sum, $entry->rate_count)+50; ?>px">
 								<?php echo rateFormat($entry->rate_sum, $entry->rate_count)*10+132; ?>
 							</div>
 						</div>
@@ -48,6 +48,10 @@
 					</li>
 					
 				<?php endforeach; ?>
+				<br class="clear" />
+				<div style="width:680px; text-align: center; margin-top:15px">
+					<?php echo $this->pagination->create_links(); ?>
+				</div>
 			</ul>
 			<br class="clear" />
 		</div>

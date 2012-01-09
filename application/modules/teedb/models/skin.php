@@ -107,14 +107,19 @@ class Skin extends CI_Model {
 		return $this->db->count_all_results();
 	}
 	
-	public function setSkin()
+	public function setSkin($name = null)
 	{
+		if(!$name and !$name = $this->input->post('name') or
+			!$this->auth and !$this->auth->logged_in()){
+			return false;
+		}
+		
 		$this->db
-			->set('name', $this->input->post('name'))
-			->set('user_id', $this->auth->getCurrentUserID())
+			->set('name', $name)
+			->set('user_id', $this->auth->get_id())
 			->set('update', 'NOW()', FALSE)
 			->set('create', 'NOW()', FALSE)
-			->insert('teedb_skin');
+			->insert(self::TABLE);
 		
 		return $this->db->insert_id();
 	}

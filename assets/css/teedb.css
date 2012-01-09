@@ -138,6 +138,17 @@ ul.float li{
 	height: 30px;
 }
 
+#cur{
+    color: #A16E36;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #543F24;
+    border: 5px solid #543F24;
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px;
+}
+
 /* -------------------------------------------------------------------- */
 
 /**

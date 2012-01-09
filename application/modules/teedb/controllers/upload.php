@@ -115,6 +115,7 @@ class Upload extends CI_Controller{
 		
 		switch($type){
 			case 'skins': 
+				$this->load->model('teedb/skin');
 				$this->load->library('teedb/Skin_preview');
 				$config['upload_path'] = './uploads/skins/';
 				$config['allowed_types'] = 'png';
@@ -177,6 +178,7 @@ class Upload extends CI_Controller{
 				}
 				$data['preview'] = base_url().'/'.$this->config->item('upload_path_skins').'/previews/'.$data['file_name'];
 				$uploads[] = $data;
+				$this->skin->setSkin($data['raw_name']);
 			}
 		}
 		return $this->_info('Upload sucessful.', $uploads);

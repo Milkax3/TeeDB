@@ -32,20 +32,28 @@ class Skins extends CI_Controller {
 		}
 		
 		//Init pagination
-		$config['base_url'] = 'teedb/skins/'.$order.'/'.$direction;
+		$config['base_url'] = 'teedb/skins/index/'.$order.'/'.$direction;
 		$config['total_rows'] = $this->skin->count_skins();
 		$config['per_page'] = 20;
 		$config['num_links'] = 5;
-		$config['uri_segment'] = 5;
+		$config['uri_segment'] = 6;
+		$config['cur_tag_open'] = '<span id="cur">';
+		$config['cur_tag_close'] = '</span>';
 		$this->pagination->initialize($config);
 		
 		//Check input $form
-		if(!is_numeric($from) || $from<0 || $from > $config['per_page'])
+		if(!is_numeric($from) || $from<0 || $from > $config['total_rows'])
 			$from=0;
+		
+		//Set limit
+		$limit = $config['total_rows'] - $from; 
+		if($limit >= $config['per_page']){
+			$limit = $config['per_page'];
+		}
 		
 		//Set output
 		$data = array();
-		$data['skins'] = $this->skin->get_skins($config['per_page'], $from, $sort, $direction);
+		$data['skins'] = $this->skin->get_skins($limit, $from, $sort, $direction);
 		$data['direction'] = $direction;
 		$data['order'] = $order;
 		
