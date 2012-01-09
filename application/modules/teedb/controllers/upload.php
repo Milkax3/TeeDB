@@ -2,20 +2,45 @@
 
 class Upload extends CI_Controller{
 
-	function __constructor(){
-		parent::__constructor();
-		 
+	function __construct(){
+		parent::__construct();
+		
+		$this->load->helper('inflector');
 	}
 	
-	public function index($type)
+	public function index($type='skins')
 	{
-		$this->load->view('header', array('title' => 'Upload skins - TeeDB'));
-		$this->load->view('nav');
-		$this->load->view('upload', array('type' => $type));
-		$this->load->view('footer');
+		$this->template->set_subtitle('Upload '.$type);
+		$this->template->view('upload', array('type' => $type));
+	}
+	
+	public function skins()
+	{
+		$this->index('skins');
+	}
+	
+	public function maps()
+	{
+		$this->index('maps');
+	}
+	
+	public function demos()
+	{
+		$this->index('demos');
+	}
+	
+	public function mapres()
+	{
+		$this->index('mapres');
+	}
+	
+	public function gameskins()
+	{
+		$this->index('gameskins');
 	}
 	
 	function skins_submit(){
+		
 		if($this->input->post('name') === FALSE 
 			or isset($_FILES['file']['name']) and !empty($_FILES['file']['name'])){
 			$this->file('skin');
@@ -46,7 +71,7 @@ class Upload extends CI_Controller{
 		$this->load->view('skin/upload', $data);
 	}
 	
-	function mapres(){
+	function _mapres(){
 		if($this->input->post('name') === FALSE 
 			or isset($_FILES['file']['name']) and !empty($_FILES['file']['name'])){
 			$this->file('mapres');
@@ -77,68 +102,115 @@ class Upload extends CI_Controller{
 		$this->load->view('mapres/upload', $data);
 	}
 	
-	function file($type){
+	function submit(){
+		if($form_errors = validation_errors('','')) {
+			return $this->_error($form_errors);	
+		}
+		
+		if(!$this->input->post('type')) {
+			return $this->_error('No type given.');
+		} else {
+			$type = $this->input->post('type');
+		}
+		
 		switch($type){
-			case 'skin': 
-				$config['upload_path'] = './upload/skin/';
+			case 'skins': 
+				$this->load->library('teedb/Skin_preview');
+				$config['upload_path'] = './uploads/skins/';
 				$config['allowed_types'] = 'png';
 				$config['max_size']	= '100'; //100kB
 				$config['max_width']  = '256';
 				$config['max_height']  = '128';
 				$config['min_width']  = '256';
 				$config['min_height']  = '128';
-				$error_view = 'skin/uploadfile';
-				$view = 'skin/upload';
 			break;
 			case 'mapres':
 				$config['upload_path'] = './upload/mapres/';
 				$config['allowed_types'] = 'png';
 				$config['max_size']	= '1000'; //1MB
-				$error_view = 'mapres/uploadfile';
-				$view = 'mapres/upload';
 			break;
 			default: 
-				$msg = 'Type incorret.';
-				$error_view = 'skin/uploadfile';
-				$error = array('error' => '<p style="float:left;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>'.$msg.'</p>');
-				$this->load->view($error_view, $error);
-				return;
+				return $this->_error('Type incorret.');
 		}
 		
 		if(!$this->auth->logged_in()){
-			$msg = 'You have to login.';
-			$error = array('error' => '<p style="float:left;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>'.$msg.'</p>');
-			$this->load->view($error_view, $error);
-			return;
+			return $this->_error('You have to login.');
 		}
 		
 		$this->load->library('upload', $config);
-	
-		if (!$this->upload->do_upload('file')){
-			$error = array('error' => $this->upload->display_errors('<p style="float:left;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>', '</p>'));
+		
+		$files = $_FILES['file'];
+		$uploads = array();
+		for($i = 0, $count = count($files['name']); $i < $count; $i++) {
+			unset($_FILES['file']);
+			$_FILES['file'] = array(
+				'name' => $files['name'][$i], 
+				'type' => $files['type'][$i], 
+				'tmp_name' => $files['tmp_name'][$i], 
+				'error' => $files['error'][$i], 
+				'size' => $files['size'][$i]
+			);
 			
-			$this->load->view($error_view, $error);
-		}else{			
-			$data = $this->upload->data();
-			
-			//Thumbnails
-			if($type == 'skin'){
-				$this->load->library('teepreview');
-				$this->teepreview->create_tee($data['full_path']);
-			}
-			if($type == 'mapres'){
-				$configResize['source_image'] = $data['full_path'];
-				$configResize['new_image'] = $config['upload_path'].'preview/';
-				$configResize['width'] = 64;
-				$configResize['height'] = 64;
+			// $uploads[] = array(
+				// 'name' => $files['name'][$i], 
+				// 'size' => $files['size'][$i]
+			// );
+		
+		
+			if (!$this->upload->do_upload('file')){
+				return $this->_error($this->upload->display_errors('', ''));
+			}else{			
+				$data = $this->upload->data();
 				
-				$this->load->library('image_lib', $configResize);				
-				$this->image_lib->resize();
+				//Thumbnails
+				if($type == 'skins'){
+					$this->skin_preview->create($data['file_name']);
+				}
+				if($type == 'mapres'){
+					$configResize['source_image'] = $data['full_path'];
+					$configResize['new_image'] = $config['upload_path'].'preview/';
+					$configResize['width'] = 64;
+					$configResize['height'] = 64;
+					
+					$this->load->library('image_lib', $configResize);				
+					$this->image_lib->resize();
+				}
+				$data['preview'] = base_url().'/'.$this->config->item('upload_path_skins').'/previews/'.$data['file_name'];
+				$uploads[] = $data;
 			}
-			
-			$upload_data = array('raw_name' => $data['raw_name'], 'file_size' => $data['file_size']);
-			$this->load->view($view, array('upload_data' => $upload_data));
 		}
+		return $this->_info('Upload sucessful.', $uploads);
+	}
+
+	function _error($msg=null) {
+		$json = array(
+			'error' => true,
+			'html' => (is_array($msg))? $msg : array($msg)
+		);
+		$this->_return_json($json);
+		return false;
+	}
+
+	function _info($msg=null, $uploads=array()) {
+		$json = array(
+			'error' => false,
+			'html' => $msg,
+			'uploads' => $uploads
+		);
+		$this->_return_json($json);
+		return true;
+	}
+
+	function _return_json($json) {
+	    $this->output->set_header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+	    $this->output->set_header('Expires: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+	    $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0");
+	    $this->output->set_header("Pragma: no-cache");
+		form_open(); //To generate a new csrf hash
+		$json['csrf_token_name'] = $this->security->get_csrf_token_name();
+		$json['csrf_hash'] = $this->security->get_csrf_hash();
+		$this->security->csrf_set_cookie();
+		$this->output->append_output(json_encode($json));
 	}
 	
 	private function _skin_validate(){

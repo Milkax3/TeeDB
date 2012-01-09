@@ -8,12 +8,12 @@
 |
 */
 
-$teedb['upload_path_demos'] = 'uploads/demos';
-$teedb['upload_path_gameskins'] = 'uploads/gameskins';
-$teedb['upload_path_mapres'] = 'uploads/mapres';
-$teedb['upload_path_maps'] = 'uploads/maps';
-$teedb['upload_path_mods'] = 'uploads/mods';
-$teedb['upload_path_skins'] = 'uploads/skins';
+$config['upload_path_demos'] = 'uploads/demos';
+$config['upload_path_gameskins'] = 'uploads/gameskins';
+$config['upload_path_mapres'] = 'uploads/mapres';
+$config['upload_path_maps'] = 'uploads/maps';
+$config['upload_path_mods'] = 'uploads/mods';
+$config['upload_path_skins'] = 'uploads/skins';
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +24,5 @@ $teedb['upload_path_skins'] = 'uploads/skins';
 |
 */
 
-$teedb['entities'] = array('vanilla', 'race', 'ddrace');
-$teedb['path_entities'] = 'uploads/entities';
+$config['entities'] = array('vanilla', 'race', 'ddrace');
+$config['path_entities'] = 'uploads/entities';
