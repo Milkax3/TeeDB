@@ -61,9 +61,7 @@ function sendRate(id, value, rate){
 
 
 
-$('#upload').click(function(){
-	$('#dialog-upload').dialog('open');
-});  
+
  	
 var refreshClose = 0;
 
@@ -81,36 +79,63 @@ $('#upload_skin > button#button').click(function() {
 	form_submit('skin');
 });
 
-function form_submit(type){
-	$('#dialog-upload form').ajaxSubmit({
+$('form#upload button').click(function(){
+	$('form#upload').ajaxSubmit({
 		type: 'POST',
-		url: 'teedb/upload/'+type,
-		iframe: true,
-		success: function(returned){
-			$('#dialog-upload form').html(returned);
-			$('#fileupload').customFileInput();
-			$('#fileupload').css('top', '64px');
-			
-			if($('#info').size()){
-				var errWidth = $('#info').css('height');
-				errWidth = parseInt(errWidth.replace('px',''))+ 18+64;
-				$('#dialog-upload .customfile-input').css('top', errWidth + 'px');	
-			}
-			
-			if($('.dialog-info').size()){
-				var errWidth = $('#dialog-upload .customfile-input').css('top');
-				errWidth = parseInt(errWidth.replace('px',''))+ 18;
-				$('#dialog-upload .customfile-input').css('top', errWidth + 'px');	
-			}
-
-			$('#refreshPreview').click(createPreview);
+		url: 'teedb/upload/submit',
+    	dataType: 'json',
+		success: function(json){
+			//Clean old info
+			$('#info').html('');
+			//Write new info
+			if(json.error) {
+				for(var i in json.html)	{
+					$('#info').append(
+						'<p class="error color border"><span class="icon color icon100"></span>'+
+						json.html[i] +
+						'</p>'
+					);
+				}
+			}else{
+				console.log(json.uploads);
+				$('#info').html(
+					'<p class="success color border"><span class="icon color icon101"></span>'+
+					json.html +
+					'</p>'
+				)
+				//.delay(5000).hide('drop', 2000, function () { $(this).remove();	})
+      			;
 				
-			if(returned.search('class="dialog-info"') != -1){
-   				refreshClose = 1;
-	       	}
-		} 
+				for(var i in json.uploads) {
+					$('#list > ul').append(
+						'<li>'+
+							'<ul><li class="delete" href="Delete"><span class="icon icon56"></span></li>'+
+							'<li class="refresh" href="Refresh"><span class="icon icon158"></span></li></ul>'+
+							'<img src="'+json.uploads[i].preview+'" href="'+json.uploads[i].raw_name+' preview" />'+
+							'<p>'+
+								json.uploads[i].raw_name +
+							'</p>'+
+						'</li>'
+					);
+				}
+				// $('#list').append(
+					// '<li class="clear"></li>'
+				// );
+				//Clear the form
+				$('input[name="file[]"]').val('');
+			}
+			//Set new csrf
+			$('input[name="'+json.csrf_token_name+'"]').val(json.csrf_hash);
+		},
+		error: function(e){
+			$('#info').html(
+				'<p class="error color border"><span class="icon color icon100"></span>'+
+				e.responseText +
+				'</p>'
+			);
+		}
 	});
-}
+});
 
 function createPreview(){
 	$('#dialog-upload form').ajaxSubmit({
@@ -136,7 +161,19 @@ function createPreview(){
 	});
 }
 
-$('#fileupload').customFileInput();
+//$('#fileupload').customFileInput();
+
+       
+function createUploader(node){            
+    var uploader = new qq.FileUploader({
+        element: node,
+        action: '/teedb/upload/file',
+        debug: true
+    });
+}
+
+if(node = document.getElementById('file-uploader'))
+	createUploader(node);
 
 
 
