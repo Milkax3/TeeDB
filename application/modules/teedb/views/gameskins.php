@@ -1,29 +1,31 @@
 <aside>	
 	<h2>Sorted by...</h2>
 	<ul>
-		<li><?php echo ($order=='new' and $direction=='desc')? anchor('teedb/skins/index/new/asc', 'Newest') : anchor('teedb/skins/index/new/desc', 'Newest'); ?></li>
-		<li><?php echo ($order=='rate' and $direction=='desc')? anchor('teedb/skins/index/rate/asc', 'Rating') : anchor('teedb/skins/index/rate/desc', 'Rating'); ?></li>
-		<li><?php echo ($order=='dw' and $direction=='desc')? anchor('teedb/skins/index/dw/asc', 'Downloads') : anchor('teedb/skins/index/dw/desc', 'Downloads'); ?></li>
-		<li><?php echo ($order=='name' and $direction=='asc')? anchor('teedb/skins/index/name/desc', 'Name') : anchor('teedb/skins/index/name/asc', 'Name'); ?></li>
-		<li><?php echo ($order=='author' and $direction=='asc')? anchor('teedb/skins/index/author/desc', 'Author') : anchor('teedb/skins/index/author/asc', 'Author'); ?></li>
+		<li><?php echo ($order=='new' and $direction=='desc')? anchor('teedb/gameskins/index/new/asc', 'Newest') : anchor('teedb/gameskins/index/new/desc', 'Newest'); ?></li>
+		<li><?php echo ($order=='rate' and $direction=='desc')? anchor('teedb/gameskins/index/rate/asc', 'Rating') : anchor('teedb/gameskins/index/rate/desc', 'Rating'); ?></li>
+		<li><?php echo ($order=='dw' and $direction=='desc')? anchor('teedb/gameskins/index/dw/asc', 'Downloads') : anchor('teedb/gameskins/index/dw/desc', 'Downloads'); ?></li>
+		<li><?php echo ($order=='name' and $direction=='asc')? anchor('teedb/gameskins/index/name/desc', 'Name') : anchor('teedb/gameskins/index/name/asc', 'Name'); ?></li>
+		<li><?php echo ($order=='author' and $direction=='asc')? anchor('teedb/gameskins/index/author/desc', 'Author') : anchor('teedb/gameskins/index/author/asc', 'Author'); ?></li>
 	</ul>
 	<br style="clear:both;" />
 	<div style="text-align: center;margin-top:20px">
-		<?php echo anchor('teedb/upload/skins', 'Upload your own skins!', 'class="button solid"'); ?>
+		<?php echo anchor('teedb/upload/gameskins', 'Upload your own gameskin!', 'class="button solid"'); ?>
 	</div>
 </aside>
 
 <section id="content">
-	<section id="skins">
-		<h2 style="margin-bottom: 10px;">Skins</h2>
+	<section id="gameskins">
+		<h2 style="margin-bottom: 10px;">Gameskins</h2>
 		
 		
 		<div id="list">
 			<ul>
-				<?php foreach($skins as $entry): $entry->rate_sum = (int)$entry->rate_sum; ?>
+				<?php foreach($gameskins as $entry): $entry->rate_sum = (int)$entry->rate_sum; ?>
 					
 					<li style="height:180px; font-weight: bold;">
-						<img src="<?php echo base_url(); ?>uploads/skins/previews/<?php echo $entry->name; ?>.png" alt="Skin <?php echo $entry->name; ?>" />
+						<div style="width:64px; height:64px">
+							<img src="<?php echo base_url(); ?>uploads/gameskins/previews/<?php echo $entry->name; ?>.png" alt="Gameskin <?php echo $entry->name; ?>" />
+						</div>
 						<p><?php echo $entry->name; ?></p>
 						<p style="font-size: 10px">
 							from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
@@ -49,7 +51,7 @@
 							</div>
 						</div>
 						<br />
-						<?php echo anchor('teedb/downloads/index/skin/'.url_title($entry->name), 'Download', 'style="font-size: 10px"'); ?>
+						<?php echo anchor('teedb/downloads/index/gameskin/'.url_title($entry->name), 'Download', 'style="font-size: 10px"'); ?>
 					</li>
 					
 				<?php endforeach; ?>

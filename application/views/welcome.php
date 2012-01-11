@@ -29,7 +29,7 @@
 				<?php echo $news->content; ?>
 			</article>
 			
-			<details open="open">
+			<div class="details">
 				<ul>
 					<li>
 						<span class="icon color icon145"></span>
@@ -48,7 +48,7 @@
 						?>
 					</li>						
 				</ul>
-			</details>
+			</div>
 			
 		<?php else: ?>
 	    	
@@ -60,14 +60,14 @@
 				There are no latest news to show :(
 			</article>
 			
-			<details open="open">
+			<div class="details">
 				<ul>
 					<li>
 						<span class="icon color icon112"></span>
 						...and no info for the news.
 					</li>					
 				</ul>
-			</details>
+			</div>
 
 		<?php endif; ?>
 		
@@ -91,56 +91,40 @@
 	<section id="stats" class="left col3">
 		<h2>Stats</h2>
 		
-		<p>
-			<?php if(isset($stats) && $stats): ?>
-				<h4>General:</h4>
-				<?php 
-					if($stats->users <= 0)
-					{
-						echo 'No user signup, yet.';
-					}
-					elseif($stats->users == 1)
-					{
-						echo 'One user signup.';
-					}
-					else
-					{
-						echo $stats->users.' users signup.';
-					}
-				?>
-				
-				<h4>Database:</h4>
-				<?php
-					$width = 178;
-					$min = 20;
-					$sum = $stats->teedb_demos + $stats->teedb_gameskins + $stats->teedb_mapres + $stats->teedb_maps + $stats->teedb_mods + $stats->teedb_skins;
-				?>
-				<div class="left" style="text-align: right">
-					Demos:<br />
-					Gameskins:<br />
-					Mapres:<br />
-					Maps:<br />
-					Mods:<br />
-					Skins:<br />
-				</div>
-				<div class="left" style="padding-left: 11px">
-					<?php $procent = ($stats->teedb_demos == 0)? 0 : ($sum/$stats->teedb_demos); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-					<?php $procent = ($stats->teedb_gameskins == 0)? 0 : ($sum/$stats->teedb_gameskins); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-					<?php $procent = ($stats->teedb_mapres == 0)? 0 : ($sum/$stats->teedb_mapres); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-					<?php $procent = ($stats->teedb_maps == 0)? 0 : ($sum/$stats->teedb_maps); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-					<?php $procent = ($stats->teedb_mods == 0)? 0 : ($sum/$stats->teedb_mods); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-					<?php $procent = ($stats->teedb_skins == 0)? 0 : ($sum/$stats->teedb_skins); ?>
-					<div class="chart" style="width: <?php echo ($procent == 0)? $min : $width * $procent; ?>px"><?php echo $procent * 100; ?>%</div>
-				</div>
-			<?php else: ?>
-				No stats found :(
-			<?php endif; ?>	
-		</p>
+		<?php if(isset($stats) && $stats): ?>
+			<h4>General:</h4>
+			<?php 
+				if($stats['users'] <= 0)
+				{
+					echo 'No user signup, yet.';
+				}
+				elseif($stats['users'] == 1)
+				{
+					echo 'One user signup.';
+				}
+				else
+				{
+					echo $stats['users'].' users signup.';
+				}
+			?>
+			
+			<h4>Database:</h4>
+			<div class="left" style="text-align: right">
+				Demos:<br />
+				Gameskins:<br />
+				Mapres:<br />
+				Maps:<br />
+				Mods:<br />
+				Skins:<br />
+			</div>
+			<div class="left" style="padding-left: 11px">
+				<?php unset($stats['users']); foreach($stats as $key => $type): ?>
+					<div class="chart" style="width: <?php echo $type['width']; ?>px"><?php echo $type['procent']; ?>%</div>
+				<?php endforeach; ?>
+			</div>
+		<?php else: ?>
+			<p>No stats found :(</p>
+		<?php endif; ?>
 	</section>
 	
 	<section id="top" class="left col3">
@@ -174,7 +158,7 @@
 			<br>
 			<b>TeeDB:</b> 
 	    	<?php if(isset($last) and $last): ?>
-	    	<?php $init = FALSE; foreach($last as $entry): if($init) echo ', '; else $init = TRUE; echo anchor('/teedb/'.$entry->type.'/'.$entry->name, $entry->name).' ('.$entry->type.')'; endforeach; ?><br>
+	    	<?php $init = FALSE; foreach($last as $entry): if($init) echo ', '; else $init = TRUE; echo anchor('/teedb/'.$entry->type.'/'.$entry->name, $entry->name, 'class="none solid"').' ('.$entry->type.')'; endforeach; ?><br>
 			<?php else: ?>
 			No uploads, yet.<br />
 			<br>

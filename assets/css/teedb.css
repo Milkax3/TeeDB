@@ -149,6 +149,10 @@ ul.float li{
     -webkit-border-radius: 6px;
 }
 
+.top, .flop{
+    cursor: pointer;
+}
+
 /* -------------------------------------------------------------------- */
 
 /**
@@ -160,12 +164,12 @@ ul.float li{
 	padding-bottom: 45px;
 }
 
-header#main{
+header.main{
 	background: url(../images/header.png) no-repeat right;
 	height: 123px;
 }
 
-header#large{
+header.large{
 	background: url(../images/header_large.png) no-repeat center;
 	height: 300px;
 }
@@ -386,7 +390,7 @@ section#content li{
 	display: inline;
 }
 
-details{
+div.details{
 	margin-bottom: 30px;
 }
 
@@ -422,7 +426,18 @@ section#content div#list > ul > li{
     padding: 5px;
     
     width: 110px;
-    height: 110px;
+    height: 90px;
+}
+
+section#content div#list > ul#skins > li{
+    height: 180px;
+    font-weight: bold;
+}
+
+section#content div#list > ul#mods > li{
+    width: 313px;
+    height: 180px;
+    font-weight: bold;
 }
 
 section#content li.delete, 

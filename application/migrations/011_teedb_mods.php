@@ -30,7 +30,9 @@ class Migration_TeeDB_Mods extends CI_Migration {
 				'id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE),
 				'name' => array('type' => 'VARCHAR', 'constraint' => '255', 'null' => FALSE),
 				'user_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
-				'discription' => array('type' => 'TEXT', 'null' => FALSE),
+				'server' => array('type' => 'INT', 'constraint' => 1, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
+				'client' => array('type' => 'INT', 'constraint' => 1, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
+				'link' => array('type' => 'VARCHAR', 'constraint' => '255', 'null' => FALSE),
 				'downloads' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
 				'update' => array('type' => 'DATETIME', 'null' => FALSE),
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)

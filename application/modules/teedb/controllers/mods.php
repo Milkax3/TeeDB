@@ -1,6 +1,6 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Skins extends CI_Controller {
+class Mods extends CI_Controller {
 
 	function __construct()
 	{
@@ -9,17 +9,17 @@ class Skins extends CI_Controller {
 		$this->load->library('pagination');
 		$this->load->helper('rate');
 		
-		$this->load->model('skin');
+		$this->load->model('mod');
 	}
 	
 	function index($order='new', $direction='desc', $from=0)
 	{
 		//Check input $order
 		switch($order){
-			case 'new': $sort = 'skin.create'; break;
+			case 'new': $sort = 'modi.create'; break;
 			case 'rate': $sort = 'SUM(rate.value)'; break;
-			case 'dw': $sort = 'skin.downloads'; break;
-			case 'name': $sort = 'skin.name'; break;
+			case 'dw': $sort = 'modi.downloads'; break;
+			case 'name': $sort = 'modi.name'; break;
 			case 'author': $sort = 'user.name'; break;
 			default: $order = 'new'; $sort = 'skin.create';
 		}
@@ -32,8 +32,8 @@ class Skins extends CI_Controller {
 		}
 		
 		//Init pagination
-		$config['base_url'] = 'teedb/skins/index/'.$order.'/'.$direction;
-		$config['total_rows'] = $this->skin->count_skins();
+		$config['base_url'] = 'teedb/mods/index/'.$order.'/'.$direction;
+		$config['total_rows'] = $this->mod->count_mods();
 		$config['per_page'] = 20;
 		$config['num_links'] = 5;
 		$config['uri_segment'] = 6;
@@ -53,12 +53,12 @@ class Skins extends CI_Controller {
 		
 		//Set output
 		$data = array();
-		$data['skins'] = $this->skin->get_skins($limit, $from, $sort, $direction);
+		$data['mods'] = $this->mod->get_mods($limit, $from, $sort, $direction);
 		$data['direction'] = $direction;
 		$data['order'] = $order;
 		
-		$this->template->set_subtitle('Skins');
-		$this->template->view('skins', $data);
+		$this->template->set_subtitle('Mods');
+		$this->template->view('mods', $data);
 	}
 }
 

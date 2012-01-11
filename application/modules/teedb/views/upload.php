@@ -7,11 +7,15 @@
 		<?php if($type != 'maps'): ?><li><?php echo anchor('teedb/upload/maps', 'Map form'); ?></li><?php endif; ?>
 		<?php if($type != 'skins'): ?><li><?php echo anchor('teedb/upload/skins', 'Skin form'); ?></li><?php endif; ?>
 	</ul>
+	<h2>Change uploads?</h2>
+	<ul>
+		<li><?php echo anchor('teedb/user/myteedb', 'My TeeDB'); ?></li>
+	</ul>
 </aside>
 
 <section id="content">
-	<section id="upload">		
-		<h2><?php echo ucfirst(singular($type)); ?> upload</h2>
+	<section id="uploader">		
+		<h2><?php echo ($type == 'mapres')? 'Mapres' : ucfirst(singular($type)); ?> upload</h2>
 		
 		<div id="info">
 			<?php echo validation_errors('<p class="error color border"><span class="icon color icon100"></span>','</p>'); ?>
@@ -19,9 +23,9 @@
 		
 		<?php echo validation_errors('<p class="error">','</p>'); ?>
 		
-		<?php echo form_open_multipart('teedb/upload/submit/'.$type, array('id' => 'upload'), array('type' => $type)); ?>
+		<?php echo form_open_multipart('teedb/upload/submit', array('id' => 'upload'), array('type' => $type)); ?>
 		
-		<?php echo form_upload('file[]', set_value('file[]'),'multiple'); ?>
+		<?php echo form_upload('file[]', null, 'multiple'); ?>
 		<?php echo form_button('upload', 'Upload'); ?>
 		
 		<?php echo form_close(); ?>

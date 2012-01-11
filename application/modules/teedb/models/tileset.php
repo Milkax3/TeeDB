@@ -7,7 +7,7 @@
  * @category	Model
  * @author		Andreas Gehle
  */
-class Mapres extends CI_Model {
+class Tileset extends CI_Model {
 	
 	const TABLE = 'teedb_mapres';
 		
@@ -19,15 +19,51 @@ class Mapres extends CI_Model {
         parent::__construct();
 		
 		$this->load->database();
+		$this->load->model(array('user', 'teedb/rate'));
 	}
+
+	// --------------------------------------------------------------------
 	
-	public function countMapres(){
-		$this->db->select('COUNT(*) AS count');
-		$this->db->from('mapres');
-		$query = $this->db->get();
-		
-		return $query->row()->count;
+	/**
+	 * Count mapres
+	 * 
+	 * @access public
+	 * @return integer
+	 */	
+	public function count_mapres()
+	{
+		return $this->db->count_all(self::TABLE);
 	}	
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get a all mapres
+	 * 
+	 * @access public
+	 * @param integer limit
+	 * @param integer offset
+	 * @param string order
+	 * @param string direction
+	 * @return string Mapres name
+	 */	
+	public function get_mapres($limit, $offset='0', $order='update', $direction='DESC')
+	{
+		$query = $this->db
+		->select('mapres.id, mapres.name, mapres.downloads, user.name AS username, mapres.create')
+		->select('SUM(rate.value) AS rate_sum, COUNT(rate.user_id) AS rate_count')
+		->from(self::TABLE.' as mapres')
+		->join(User::TABLE.' as user', 'mapres.user_id = user.id')
+		->join(Rate::TABLE.' as rate', 'mapres.id = rate.type_id AND rate.type = "mapres"', 'left')
+		->order_by($order, $direction)
+		->group_by('mapres.id')
+		->limit($limit, $offset)
+		->get();
+		
+		return $query->result();
+	}
+
+	// --------------------------------------------------------------------
 	
 	public function countUserMapres($name){
 		$this->db->select('COUNT(*) AS count');
@@ -53,12 +89,17 @@ class Mapres extends CI_Model {
 		return FALSE;		
 	}
 	
-	public function setMapres(){
-		$this->db->set('name', $this->input->post('name'));
-		$this->db->set('user_id', $this->auth->getCurrentUserID());
+	public function setMapres($name = null){
+		if(!$name and !$name = $this->input->post('name') or
+			!$this->auth and !$this->auth->logged_in()){
+			return false;
+		}
+		
+		$this->db->set('name', $name);
+		$this->db->set('user_id', $this->auth->get_id());
 		$this->db->set('update', 'NOW()', FALSE);
 		$this->db->set('create', 'NOW()', FALSE);
-		$this->db->insert('mapres');
+		$this->db->insert(self::TABLE);
 		
 		return $this->db->insert_id();
 	}

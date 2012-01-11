@@ -1,6 +1,6 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Skins extends CI_Controller {
+class Gameskins extends CI_Controller {
 
 	function __construct()
 	{
@@ -9,19 +9,19 @@ class Skins extends CI_Controller {
 		$this->load->library('pagination');
 		$this->load->helper('rate');
 		
-		$this->load->model('skin');
+		$this->load->model('teedb/gameskin');
 	}
 	
 	function index($order='new', $direction='desc', $from=0)
 	{
 		//Check input $order
 		switch($order){
-			case 'new': $sort = 'skin.create'; break;
+			case 'new': $sort = 'gameskin.create'; break;
 			case 'rate': $sort = 'SUM(rate.value)'; break;
-			case 'dw': $sort = 'skin.downloads'; break;
-			case 'name': $sort = 'skin.name'; break;
+			case 'dw': $sort = 'gameskin.downloads'; break;
+			case 'name': $sort = 'gameskin.name'; break;
 			case 'author': $sort = 'user.name'; break;
-			default: $order = 'new'; $sort = 'skin.create';
+			default: $order = 'new'; $sort = 'gameskin.create';
 		}
 		
 		//Check input $direction
@@ -32,8 +32,8 @@ class Skins extends CI_Controller {
 		}
 		
 		//Init pagination
-		$config['base_url'] = 'teedb/skins/index/'.$order.'/'.$direction;
-		$config['total_rows'] = $this->skin->count_skins();
+		$config['base_url'] = 'teedb/gameskins/index/'.$order.'/'.$direction;
+		$config['total_rows'] = $this->gameskin->count_gameskins();
 		$config['per_page'] = 20;
 		$config['num_links'] = 5;
 		$config['uri_segment'] = 6;
@@ -53,14 +53,14 @@ class Skins extends CI_Controller {
 		
 		//Set output
 		$data = array();
-		$data['skins'] = $this->skin->get_skins($limit, $from, $sort, $direction);
+		$data['gameskins'] = $this->gameskin->get_gameskins($limit, $from, $sort, $direction);
 		$data['direction'] = $direction;
 		$data['order'] = $order;
 		
-		$this->template->set_subtitle('Skins');
-		$this->template->view('skins', $data);
+		$this->template->set_subtitle('Gameskins');
+		$this->template->view('gameskins', $data);
 	}
 }
 
-/* End of file skins.php */
-/* Location: ./application/modules/teedb/controllers/skins.php */
+/* End of file mapres.php */
+/* Location: ./application/modules/teedb/controllers/mapres.php */

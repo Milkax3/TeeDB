@@ -50,7 +50,7 @@ class Download extends CI_Model {
 				$dowloads = $dw->downloads + 1;
 				$this->db->set('downloads', $dowloads);
 				$this->db->where('name', $name);
-				$this->db->update('skin');
+				$this->db->update($type);
 				
 				if($ip != '0.0.0.0'){
 					$this->db->set('type_id', $dw->id);

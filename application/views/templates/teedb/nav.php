@@ -1,5 +1,5 @@
 <div id="jungle" class="wrapper">
-	<header id="<?php echo (isset($large) && $large)? 'large' : 'main'; ?>" class="center">
+	<header class="<?php echo (isset($large) && $large)? 'large' : 'main'; ?> center">
 		
 		<div id="logo">
 			<a class="none" href="<?php echo base_url(); ?>">
@@ -41,8 +41,11 @@
 				<ul style="width: 0px">
 					<li>
 						<p>What would you like to do?</p>
+						<p>
 							<br />
 							<?php echo anchor('teedb/upload/','Upload'); ?>
+							<br /><br />
+							<?php echo anchor('user/edit','My TeeDB'); ?>
 							<br /><br />
 							<?php echo anchor('user/edit','Edit profile'); ?>
 							<br /><br />

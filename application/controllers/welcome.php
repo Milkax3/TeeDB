@@ -39,12 +39,26 @@ class Welcome extends CI_Controller {
 	}
 	
 	public function index()
-	{		
+	{
 		$data['news_titles'] = $this->blog->get_latest_titles();
 		$data['news'] = $this->blog->get_latest(1);
-		$data['stats'] = $this->common->get_stats();
+		
+		//Calculate chartbar values
+		$data['stats'] = array();
+		$stats = $this->common->get_stats();
+		$data['stats']['users'] = $stats->users;
+		unset($stats->users);
+		$width = 178; //Width of full chart bar
+		$min = 20; //Min width by 0%
+		$sum = $stats->teedb_demos + $stats->teedb_gameskins + $stats->teedb_mapres + $stats->teedb_maps + $stats->teedb_mods + $stats->teedb_skins;
+		
+		foreach($stats as $key => $count){
+			$data['stats'][$key]['procent'] = ($count > 0)? round($count/$sum * 100,2) : 0;
+			($data['stats'][$key]['width'] = round($data['stats'][$key]['procent'] * $width / 100)) >= $min OR $data['stats'][$key]['width'] = $min;
+		}
+		
 		$data['last_user'] = $this->user->get_last_user();
-		$data['last'] = $this->common->getLastTeeDBEntries();
+		$data['last'] = $this->common->get_last();
 		
 		$this->template->set_layout_data('nav', array('large' => TRUE, 'randomtee' => $this->skin->get_random()));
 		$this->template->view('welcome', $data);

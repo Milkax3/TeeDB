@@ -34,17 +34,14 @@ class Common extends CI_Model {
 		$tables = array(Demo::TABLE, Gameskin::TABLE, Map::TABLE, Mapres::TABLE, Mod::TABLE, Skin::TABLE, User::TABLE);
 		
 		foreach($tables as $table){		
-			$this->db->select('count(*) AS count');
-			if($table == 'user'){
-				$this->db->from($table);				
-			}else{
-				$this->db->from($table);
-			}
+			$this->db
+				->select('count(*) AS count1')
+				->from($table);
 			$stats[$table] = $this->db->get()->row();
 		}
 
 		foreach($stats as $table => $stat){		
-			$this->db->select($stat->count.' AS `'.$table.'`', FALSE);
+			$this->db->select($stat->count1.' AS `'.$table.'`', FALSE);
 		}
 		$query = $this->db->get();
 		
@@ -55,19 +52,19 @@ class Common extends CI_Model {
 	// TODO: Continue model reworking ...
 	// --------------------------------------------------------------------
 	
-	function getLastTeeDBEntries($limit=6){
-		$tables = array('teedb_map', 'teedb_mapres', 'teedb_gameskin', 'teedb_demo', 'teedb_mod');
+	function get_last($limit=6){
+		$tables = array(Demo::TABLE, Gameskin::TABLE, Map::TABLE, Mapres::TABLE, Mod::TABLE);
 		$queryStr = '';
 		
 		foreach($tables as $table){		
 			$this->db->select('id, name, create');
-			$queryStr .= $this->db->_compile_select().", '{PRE}$table' AS type FROM `{PRE}$table` LIMIT $limit UNION ";
-			$this->db->_reset_select();
+			$queryStr .= $this->db->get_compiled_select().", '".$this->db->dbprefix($table)."' AS type FROM `".$this->db->dbprefix($table)."` LIMIT $limit UNION ";
+			$this->db->reset_query();
 		}
 
 		$this->db->select('id, name, create');
-		$queryStr .= $this->db->_compile_select().", '{PRE}teedb_skin' AS type FROM `{PRE}teedb_skin` ";
-		$this->db->_reset_select();		
+		$queryStr .= $this->db->get_compiled_select().", '".$this->db->dbprefix(Skin::TABLE)."' AS type FROM `".$this->db->dbprefix(Skin::TABLE)."` ";
+		$this->db->reset_query();		
 		
 		$queryStr .= 'GROUP BY `id` ORDER BY `create` DESC LIMIT '.$limit;			
 		$query = $this->db->query($queryStr);

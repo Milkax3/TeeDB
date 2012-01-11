@@ -82,7 +82,7 @@ class Skin extends CI_Model {
 	public function get_skins($limit, $offset='0', $order='update', $direction='DESC')
 	{
 		$query = $this->db
-		->select('skin.id, skin.name, skin.downloads, user.name AS username, skin.update')
+		->select('skin.id, skin.name, skin.downloads, user.name AS username, skin.create')
 		->select('SUM(rate.value) AS rate_sum, COUNT(rate.user_id) AS rate_count')
 		->from(self::TABLE.' as skin')
 		->join(User::TABLE.' as user', 'skin.user_id = user.id')
