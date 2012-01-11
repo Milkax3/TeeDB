@@ -12,10 +12,7 @@ class Rates extends CI_Controller {
 	}
 	
 	function index()
-	{
-		//Dont use csrf here
-		$_POST[$this->security->get_csrf_token_name()] = $this->security->get_csrf_hash();
-		
+	{		
 		//Check values
 		$id = (int) $this->input->post('id');
 		if(!is_numeric($id) or $id <= 0)
@@ -26,6 +23,8 @@ class Rates extends CI_Controller {
 			case 'skin':
 			case 'mapres':
 			case 'mod':
+			case 'map':
+			case 'demo':
 				break;
 			default: return FALSE;
 		}

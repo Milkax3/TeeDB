@@ -14,7 +14,7 @@ class Template {
 	protected $theme		= 'default';
 	protected $layouts   	= array();
 	protected $layout_data 	= array();	
-	protected $header_data	= array();
+	public $header_data		= array();
 	protected $footer_data	= array();
 	
 	protected $css 			= array();

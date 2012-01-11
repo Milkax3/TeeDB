@@ -21,8 +21,8 @@
 	    <?php foreach($posts as $entry): ?>
 			<item>
 				<title><?php echo xml_convert($entry['post_title']); ?></title>
-	          	<link><?php echo site_url('blog/post/' . $entry['url_title']) ?></link>
-	          	<guid><?php echo site_url('blog/post/' . $entry['url_title']) ?></guid>
+	          	<link><?php echo site_url('blog/post' . $entry['url_title']) ?></link>
+	          	<guid><?php echo site_url('blog/post' . $entry['url_title']) ?></guid>
 	
 	          	<description><![CDATA[
 	      			<?php echo str_replace('/img/post_resources/', base_url() . 'img/post_resources/', $entry['post_body']); ?>

@@ -9,7 +9,7 @@ class Skins extends CI_Controller {
 		$this->load->library('pagination');
 		$this->load->helper('rate');
 		
-		$this->load->model('skin');
+		$this->load->model('teedb/skin');
 	}
 	
 	function index($order='new', $direction='desc', $from=0)

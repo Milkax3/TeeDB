@@ -17,6 +17,9 @@
 	<section id="gameskins">
 		<h2 style="margin-bottom: 10px;">Gameskins</h2>
 		
+		<div id="info">
+			<?php echo validation_errors('<p class="error color border"><span class="icon color icon100"></span>','</p>'); ?>
+		</div>		
 		
 		<div id="list">
 			<ul>

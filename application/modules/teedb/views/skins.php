@@ -17,12 +17,15 @@
 	<section id="skins">
 		<h2 style="margin-bottom: 10px;">Skins</h2>
 		
+		<div id="info">
+			<?php echo validation_errors('<p class="error color border"><span class="icon color icon100"></span>','</p>'); ?>
+		</div>
 		
 		<div id="list">
 			<ul>
 				<?php foreach($skins as $entry): $entry->rate_sum = (int)$entry->rate_sum; ?>
 					
-					<li style="height:180px; font-weight: bold;">
+					<li>
 						<img src="<?php echo base_url(); ?>uploads/skins/previews/<?php echo $entry->name; ?>.png" alt="Skin <?php echo $entry->name; ?>" />
 						<p><?php echo $entry->name; ?></p>
 						<p style="font-size: 10px">

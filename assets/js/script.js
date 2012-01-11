@@ -10,9 +10,10 @@ $('nav > ul > li').mouseout(navTimer);
 
 //Bind tops
 var vote = 0;
+var lock = 0;
 $('.top').click(function(){
-	//Send vote
-	if(vote != 1){
+	if(!lock && vote != 1){
+		lock = 1;
 		sendRate($(this), 1);
 		vote = 1;
 	}
@@ -20,8 +21,8 @@ $('.top').click(function(){
 
 //Bind flops
 $('.flop').click(function() {
-	//Send vote
-	if(vote != 2){
+	if(vote != 2 && !lock){
+		lock = 1;
 		sendRate($(this), 0);
 		vote = 2;
 	}
@@ -39,6 +40,20 @@ function sendRate(obj, value){
     	dataType: 'json',
 		success: function(json){
 			if(json){
+				//Set new csrf
+				$('input[name="'+json.csrf_token_name+'"]').val(json.csrf_hash);
+				
+				//Need login
+				if(!json.like || !json.dislike){
+					
+					$('#info').append(
+						'<p class="error color border"><span class="icon color icon100"></span>'+
+						'You have to login.' +
+						'</p>'
+					);
+					return;
+				}
+				
 				//Update chartbar
 				like.css('width', json.like);
 				dislike.css('width', json.dislike);
@@ -62,8 +77,8 @@ function sendRate(obj, value){
 						}
 					}
 				}
-				//Set new csrf
-				$('input[name="'+json.csrf_token_name+'"]').val(json.csrf_hash);
+				//Rest lock
+				lock = 0;
 			}
 		}
 	});

@@ -10,16 +10,15 @@ class Feed extends CI_Controller {
         parent::__construct();
 		
         $this->load->helper(array('xml', 'url'));
+    	$this->load->library('template');
     }
     
     function index()
     {
-    	$this->config->load('template');
-		
         $data['encoding'] = 'utf-8';
-        $data['feed_name'] = $this->config->item('title');
+        $data['feed_name'] = $this->template->header_data['title'];
         $data['feed_url'] = base_url();
-        $data['page_description'] = $this->config->item('description');
+        $data['page_description'] = $this->template->header_data['description'];
         $data['page_language'] = 'en-ca';
         $data['creator_email'] = 'support (at) site (dot) com';
         

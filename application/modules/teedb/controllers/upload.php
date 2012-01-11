@@ -83,6 +83,13 @@ class Upload extends CI_Controller{
 				$config['min_width']  = '1024';
 				$config['min_height']  = '512';
 			break;
+			case 'maps':
+				$this->load->model('teedb/map');
+				//$this->load->library('teedb/Map_preview');
+				$config['upload_path'] = './'.$this->config->item('upload_path_maps');
+				$config['allowed_types'] = 'map';
+				$config['max_size']	= '10000'; //10MB
+			break;
 			default: 
 				return $this->_error('Type incorret.');
 		}
@@ -142,6 +149,10 @@ class Upload extends CI_Controller{
 					$this->image_lib->clear();
 					$data['preview'] = base_url().($this->config->item('upload_path_gameskins')).'/previews/'.$data['file_name'];
 					$this->gameskin->setGameskin($data['raw_name']);
+				}elseif($type == 'maps'){
+					//$this->map_preview->create($data['file_name']);
+					$data['preview'] = base_url().($this->config->item('upload_path_maps')).'/previews/'.$data['raw_name'].'.png';
+					$this->map->setMap($data['raw_name']);
 				}
 				$uploads[] = $data;
 			}

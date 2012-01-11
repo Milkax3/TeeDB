@@ -50,15 +50,15 @@ class Welcome extends CI_Controller {
 		unset($stats->users);
 		$width = 178; //Width of full chart bar
 		$min = 20; //Min width by 0%
-		$sum = $stats->teedb_demos + $stats->teedb_gameskins + $stats->teedb_mapres + $stats->teedb_maps + $stats->teedb_mods + $stats->teedb_skins;
+		$sum = $stats->demos + $stats->gameskins + $stats->mapres + $stats->maps + $stats->mods + $stats->skins;
 		
 		foreach($stats as $key => $count){
-			$data['stats'][$key]['procent'] = ($count > 0)? round($count/$sum * 100,2) : 0;
+			$data['stats'][$key]['procent'] = ($count > 0)? round($count/$sum * 100) : 0;
 			($data['stats'][$key]['width'] = round($data['stats'][$key]['procent'] * $width / 100)) >= $min OR $data['stats'][$key]['width'] = $min;
 		}
 		
 		$data['last_user'] = $this->user->get_last_user();
-		$data['last'] = $this->common->get_last();
+		$data['last'] = $this->common->get_last(15);
 		
 		$this->template->set_layout_data('nav', array('large' => TRUE, 'randomtee' => $this->skin->get_random()));
 		$this->template->view('welcome', $data);

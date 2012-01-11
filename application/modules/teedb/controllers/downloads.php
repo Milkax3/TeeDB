@@ -17,6 +17,7 @@ class Downloads extends CI_Controller {
 		{
 			case 'skin': $file = 'uploads/skins/'.$name.'.png'; break;
 			case 'mapres': $file = 'uploads/mapres/'.$name.'.png'; break;
+			case 'gameskin': $file = 'uploads/gameskins/'.$name.'.png'; break;
 			default: redirect('/');
 		}
 		

@@ -414,7 +414,7 @@ div#list{
     border: 0;
 }
 
-section#content div#list > ul > li{
+section#content div#list li{
     text-align: center;
     color: #A16E36;
     margin: 3px;
@@ -429,14 +429,22 @@ section#content div#list > ul > li{
     height: 90px;
 }
 
-section#content div#list > ul#skins > li{
+section#skins div#list li,
+section#mapres div#list li,
+section#gameskins div#list li{
     height: 180px;
     font-weight: bold;
 }
 
-section#content div#list > ul#mods > li{
+section#mods div#list li{
     width: 313px;
     height: 180px;
+    font-weight: bold;
+}
+
+section#maps div#list li{
+    width: 200px;
+    height: 118px;
     font-weight: bold;
 }
 
