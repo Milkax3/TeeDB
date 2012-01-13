@@ -20,8 +20,8 @@
 	    	
 			<header style="margin-bottom: 10px;">
 				<h2><?php echo $news->title; ?></h2>
-				<time datetime="<?php echo date('c', human_to_unix($news->update)); ?>">
-					<?php echo datetime_to_human($news->update); ?>
+				<time datetime="<?php echo date('c', human_to_unix($news->create)); ?>">
+					<?php echo datetime_to_human($news->create); ?>
 				</time>
 			</header>
 			
@@ -112,8 +112,8 @@
 			<div class="left" style="text-align: right">
 				Demos:<br />
 				Gameskins:<br />
-				Mapres:<br />
 				Maps:<br />
+				Mapres:<br />
 				Mods:<br />
 				Skins:<br />
 			</div>

@@ -7,24 +7,27 @@ class Downloads extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->helper('download');
-		
 		$this->load->model('teedb/download');
 	}
 	
 	function index($type, $name)
 	{
+		$ext = '.png';
+		
 		switch($type)
 		{
 			case 'skin': $file = 'uploads/skins/'.$name.'.png'; break;
 			case 'mapres': $file = 'uploads/mapres/'.$name.'.png'; break;
 			case 'gameskin': $file = 'uploads/gameskins/'.$name.'.png'; break;
+			case 'map': $file = 'uploads/maps/'.$name.'.map'; $ext = '.map'; break;
+			case 'demo': $file = 'uploads/demos/'.$name.'.demo'; $ext = '.demo'; break;
 			default: redirect('/');
 		}
 		
 		if(is_file($file) and $data = file_get_contents($file))
 		{
 			//$this->download->increment($type, $name);
-			force_download($name.'.png', $data);
+			force_download($name.$ext, $data);
 		}else{
 			redirect('/'); //TODO: file coundn't found message here
 		}

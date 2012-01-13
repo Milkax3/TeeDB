@@ -8,23 +8,23 @@ $('nav > ul > li').mouseover(navOpen);
 $('nav > ul > li').mouseout(navTimer);
 
 
-//Bind tops
+//Bind tops and flops
 var vote = 0;
 var lock = 0;
+
 $('.top').click(function(){
-	if(!lock && vote != 1){
+	if(!lock && vote != $(this)){
 		lock = 1;
 		sendRate($(this), 1);
-		vote = 1;
+		vote = $(this);
 	}
 });
 
-//Bind flops
 $('.flop').click(function() {
-	if(vote != 2 && !lock){
+	if(!lock && vote != $(this)){
 		lock = 1;
 		sendRate($(this), 0);
-		vote = 2;
+		vote = $(this);
 	}
 });
 

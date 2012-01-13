@@ -41,6 +41,11 @@ class Upload extends CI_Controller{
 		$this->index('gameskins');
 	}
 	
+	public function mods()
+	{
+		$this->index('mods');
+	}
+	
 	function submit()
 	{
 		if($form_errors = validation_errors('','')) {

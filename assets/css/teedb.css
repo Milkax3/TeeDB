@@ -444,7 +444,7 @@ section#mods div#list li{
 
 section#maps div#list li{
     width: 200px;
-    height: 118px;
+    height: 153px;
     font-weight: bold;
 }
 
@@ -619,6 +619,23 @@ button, .button, textarea, input, select{
 	border-radius: 6px;	
 	-moz-border-radius: 6px; 
 	-webkit-border-radius: 6px; 
+}
+
+.checkbox, .radio {
+    background: #5B432A !important;
+    color: #A16E36; 
+    margin: 1px;
+    border: 3px solid #825A26 !important;
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px; 
+  
+    width: 19px;
+    height: 25px;
+    padding: 0 5px 0 0;
+    display: block;
+    clear: left;
+    float: left;
 }
 
 button, .button, input[type=submit]{

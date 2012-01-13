@@ -48,37 +48,4 @@ class Teedb extends CI_Controller{
 			});	
 		");	
 	}
-	
-	function rate(){
-		$id = $this->input->post('id');
-		
-		switch($this->input->post('type')){
-			case 'skin': $type = 'skin'; break;
-			case 'mapres': $type = 'mapres'; break;
-			default: return FALSE;
-		}
-		
-		if($this->input->post('rate')!= 1 and $this->input->post('rate') != 0)
-			return FALSE;
-			
-		$this->load->Model('Rate');
-		$this->config->set_item('compress_output', FALSE);
-		echo ($this->Rate->setRate($type, $id, $this->input->post('rate'))*10);
-	}
-	
-	function download($type, $name){
-		switch($type){
-			case 'skin': $file = 'upload/skins/'.$name.'.png'; break;
-			case 'mapres': $file = 'upload/mapress/'.$name.'.png'; break;
-			default: redirect('/');
-		}
-		if(is_file($file) and $data = file_get_contents($file)){ //austausch file_exists => is_file | performance
-			$this->load->helper('download');
-			$this->load->Model('download');
-			$this->download->increment($type, $name);
-			force_download($name.'.png', $data);
-		}else{
-			redirect('/'); //TODO: file coundn't found message here
-		}
-	}
 }
