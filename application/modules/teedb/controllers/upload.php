@@ -48,6 +48,9 @@ class Upload extends CI_Controller{
 	
 	function submit()
 	{
+		//var_dump($_FILES['file']['type'][0]);
+		//return $this->_error('From '.$_FILES['file']['type'][0].' to '.preg_replace("/^(.+?);.*$/", "\\1", $_FILES['file']['type'][0]).' !');
+		
 		if($form_errors = validation_errors('','')) {
 			return $this->_error($form_errors);	
 		}
@@ -95,6 +98,13 @@ class Upload extends CI_Controller{
 				$config['allowed_types'] = 'map';
 				$config['max_size']	= '10000'; //10MB
 			break;
+			case 'demos':
+				$this->load->model('teedb/demo');
+				//$this->load->library('teedb/Demo_reader');
+				$config['upload_path'] = './'.$this->config->item('upload_path_demos');
+				$config['allowed_types'] = 'demo';
+				$config['max_size']	= '10000'; //10MB
+			break;
 			default: 
 				return $this->_error('Type incorret.');
 		}
@@ -125,7 +135,9 @@ class Upload extends CI_Controller{
 				
 				//Thumbnails
 				if($type == 'skins'){
-					$this->skin_preview->create($data['file_name']);
+					if(!@$this->skin_preview->create($data['file_name'])){
+						return $this->_error('Coudnt generate preview image.');
+					}
 					$data['preview'] = base_url().($this->config->item('upload_path_skins')).'/previews/'.$data['file_name'];
 					$this->skin->setSkin($data['raw_name']);
 				}elseif($type == 'mapres'){
@@ -158,6 +170,10 @@ class Upload extends CI_Controller{
 					//$this->map_preview->create($data['file_name']);
 					$data['preview'] = base_url().($this->config->item('upload_path_maps')).'/previews/'.$data['raw_name'].'.png';
 					$this->map->setMap($data['raw_name']);
+				}elseif($type == 'demos'){
+					//$this->demo_reader->getMap($data['file_name']);
+					//$data['preview'] = base_url().($this->config->item('upload_path_maps')).'/previews/'.$data['raw_name'].'.png';
+					$this->demo->setDemo($data['raw_name']);
 				}
 				$uploads[] = $data;
 			}

@@ -97,15 +97,53 @@ class Skin extends CI_Model {
 
 	// --------------------------------------------------------------------
 	
-	public function countUserSkins($name)
+	/**
+	 * Count user skins
+	 * 
+	 * @access public
+	 * @return integer
+	 */	
+	public function count_my_skins()
 	{
 		$this->db
-			->from('teedb_skin as skin')
-			->join('user', 'skin.user_id = user.id')
-			->where('user.name', $name);		
+			->from(self::TABLE.' as skin')
+			->join(User::TABLE.' as user', 'skin.user_id = user.id')
+			->where('user.id', $this->auth->get_id());		
 		
 		return $this->db->count_all_results();
 	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get user skins
+	 * 
+	 * @access public
+	 * @param integer limit
+	 * @param integer offset
+	 * @param string order
+	 * @param string direction
+	 * @return string Skin name
+	 */	
+	public function get_my_skins($limit, $offset='0', $order='update', $direction='DESC')
+	{
+		$query = $this->db
+		->select('skin.id, skin.name, skin.downloads, user.name AS username, skin.create')
+		->select('SUM(rate.value) AS rate_sum, COUNT(rate.user_id) AS rate_count')
+		->from(self::TABLE.' as skin')
+		->join(User::TABLE.' as user', 'skin.user_id = user.id')
+		->join(Rate::TABLE.' as rate', 'skin.id = rate.type_id AND rate.type = "skin"', 'left')
+		->where('user.id', $this->auth->get_id())
+		->order_by($order, $direction)
+		->group_by('skin.id')
+		->limit($limit, $offset)
+		->get();
+		
+		return $query->result();
+	}
+	
+
+	// --------------------------------------------------------------------
 	
 	public function setSkin($name = null)
 	{

@@ -448,6 +448,16 @@ section#maps div#list li{
     font-weight: bold;
 }
 
+section#demos div#list li{
+    height: 118px;
+    font-weight: bold;
+}
+
+section#myteedb div#list ul#skins li{
+    height: 114px;
+    font-weight: bold;
+}
+
 section#content li.delete, 
 section#content li.refresh{
     float: right;

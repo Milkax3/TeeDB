@@ -45,7 +45,7 @@
 							<br />
 							<?php echo anchor('teedb/upload/','Upload'); ?>
 							<br /><br />
-							<?php echo anchor('user/edit','My TeeDB'); ?>
+							<?php echo anchor('teedb/myteedb','My TeeDB'); ?>
 							<br /><br />
 							<?php echo anchor('user/edit','Edit profile'); ?>
 							<br /><br />

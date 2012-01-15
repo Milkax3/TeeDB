@@ -10,13 +10,19 @@
 	</ul>
 	<h2>Change uploads?</h2>
 	<ul>
-		<li><?php echo anchor('teedb/user/myteedb', 'My TeeDB'); ?></li>
+		<li><?php echo anchor('teedb/myteedb', 'My TeeDB'); ?></li>
 	</ul>
 </aside>
 
 <section id="content">
 	<section id="uploader">		
 		<h2><?php echo ($type == 'mapres')? 'Mapres' : ucfirst(singular($type)); ?> upload</h2>
+		
+		<?php if($type == 'mods'): ?>
+			<p class="info border"><span class="icon color icon112"></span>
+				For security reason you are only allowed to share a link instead of uploading.
+			</p>
+		<?php endif; ?>
 		
 		<div id="info">
 			<?php echo validation_errors('<p class="error color border"><span class="icon color icon100"></span>','</p>'); ?>
@@ -28,18 +34,29 @@
 			<?php if($type != 'mods'): ?>
 				<?php echo form_upload('file[]', null, 'multiple'); ?>
 			<?php else: ?>
-				<label for="name">Mod-name:</label><br />
-				<?php echo form_input('modname',set_value('modname')); ?>
-				<br /><br />
-				<label for="link">Link:</label><br />
-				<?php echo form_input('link',set_value('link')); ?>
-				<br /><br />
-				<label for="has">Mod has:</label><br />
-				<?php echo form_checkbox('server',set_value('server')); ?> Server<br/>
-				<?php echo form_checkbox('client',set_value('client')); ?> Client<br/>
-				<br /><br />
-				<label for="file">Screenshot:</label><br />				
-				<?php echo form_upload('file[]', null, 'multiple'); ?>	
+				<div style="margin: 20px 0;">
+					<div style="float: left;">
+						<label for="name">Modification-name:</label><br />
+						<?php echo form_input('modname',set_value('modname'), 'style="width:321px"'); ?>
+					</div>
+					<div style="float: left;width:323px; margin-left:20px;height: 46px">
+						<label for="has">Modified:</label><br />
+						<div style="width: 50%; float:left">
+							<?php echo form_checkbox('server',set_value('server')); ?> <span class="solid">Server</span>
+						</div>
+						<div style="width: 50%; float:left">
+						<?php echo form_checkbox('client',set_value('client')); ?> <span class="solid">Client</span>
+						</div>
+					</div>
+					<div style="float: left">
+						<label for="link">Link:</label><br />
+						<?php echo form_input('link',set_value('link'), 'style="width:321px"'); ?>
+					</div>
+					<div style="float: left;margin-left: 20px;width:333px;height: 46px">
+						<label for="file">Screenshot:</label><br />				
+						<?php echo form_upload('file[]', null, 'multiple'); ?>	
+					</div>
+				</div>
 			<?php endif; ?>
 			
 		<?php echo form_button('upload', 'Upload'); ?>
