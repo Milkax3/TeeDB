@@ -138,6 +138,11 @@ ul.float li{
 	height: 30px;
 }
 
+.bold{
+    height: 30px;
+    font-weight: bold;
+}
+
 #cur{
     color: #A16E36;
     font-weight: bold;
@@ -385,7 +390,6 @@ section#content li{
 	list-style: none;
 	background-image: none;	
 	padding: 3px 0 3px 22px;
-	height: 16px;
 	float: left;
 	display: inline;
 }
@@ -394,6 +398,19 @@ div.details{
 	margin-bottom: 30px;
 }
 
+section#comments li{
+    text-align: center;
+    color: #A16E36;
+    margin: 3px;
+    background-color: #543f24;
+    border: 5px solid #543f24;
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px;
+    padding: 5px;
+}
+
+div#lister,
 div#list{
     background-color: #835A26;
     border: 5px solid #835A26;
@@ -403,18 +420,23 @@ div#list{
     margin-top: 20px;
 }
 
+#lister p,
 #list p{
     padding: 0;
     margin: 0;
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
+#lister ul,
 #list ul{
     display: inline;
     background: none;
     border: 0;
 }
 
-section#content div#list li{
+section#content div#list li,
+section#content div#lister li{
     text-align: center;
     color: #A16E36;
     margin: 3px;
@@ -426,7 +448,16 @@ section#content div#list li{
     padding: 5px;
     
     width: 110px;
+}
+
+section#content div#list li{
+    width: 110px;
     height: 90px;
+}
+
+section#comments div#lister li{
+    width: 120px;
+    color: #EFA350;
 }
 
 section#skins div#list li,
@@ -453,8 +484,14 @@ section#demos div#list li{
     font-weight: bold;
 }
 
-section#myteedb div#list ul#skins li{
+section#myteedb div#list ul#skins li,
+section#myteedb div#list ul#mapres li{
     height: 114px;
+    font-weight: bold;
+}
+
+section#myteedb div#list ul#gameskins li{
+    height: 105px;
     font-weight: bold;
 }
 
@@ -571,6 +608,28 @@ section#content section.skin ul{
     background-color: #800000;
     border: 1px solid #800000;
 }
+
+.mark{
+    color: #3A2B1B;
+    font-weight: bold;
+    background-color: #825a26;
+    border: 5px solid #825a26;
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px;
+    font-size: 10px;
+}
+
+/*article{    
+    color: #FFC96C;
+    margin: 3px;
+    background-color: #543f24;
+    border: 5px solid #543f24;
+    border-radius: 6px; 
+    -moz-border-radius: 6px; 
+    -webkit-border-radius: 6px;
+    padding: 5px;
+}*/
 
 /* -------------------------------------------------------------------- */
 

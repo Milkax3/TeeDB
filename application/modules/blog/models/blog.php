@@ -24,34 +24,38 @@ class Blog extends CI_Model{
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Count news
+	 * 
+	 * @access public
+	 * @return integer
+	 */	
+	public function count_news()
+	{
+		return $this->db->count_all(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Get latest news
 	 * 
 	 * @access public
 	 * @param integer limit
 	 * @return db-obj
 	 */
-	public function get_latest($limit=5)
+	public function get_latest($limit, $offset=0, $order='news.create', $direction='DESC')
 	{
 		$query = $this->db
-		->select('title, content, name, news.create, COUNT(comment.id) AS count_comment')
+		->select('news.id, news.title, news.content, user.name, news.create, COUNT(comment.id) AS count_comment')
 		->from(self::TABLE.' as news')
 		->join(User::TABLE.' as user', 'news.user_id = user.id')
-		->join(Comment::TABLE.' as comment', 'news.id = comment.type_id AND comment.type = "blog"', 'left')
+		->join(Comment::TABLE.' as comment', 'news.id = comment.news_id', 'left')
 		->group_by('news.id')
-		->order_by('news.create DESC')
-		->limit($limit)
+		->order_by($order, $direction)
+		->limit($limit, $offset)
 		->get();
 		
-		if($query->num_rows())
-		{
-			if($limit > 1)
-			{
-				return $query->result();
-			}
-			return $query->row();
-		}
-		
-		return FALSE;
+		return $query->result();
 	}
 
 	// --------------------------------------------------------------------
@@ -75,6 +79,35 @@ class Blog extends CI_Model{
 	}
 
 	// --------------------------------------------------------------------
+	
+	/**
+	 * Get news by title
+	 * 
+	 * @access public
+	 * @param integer limit
+	 * @return db-obj
+	 */
+	public function get_news($title)
+	{
+		$query = $this->db
+		->select('news.id, title, content, name, news.create, COUNT(comment.id) AS count_comment')
+		->from(self::TABLE.' as news')
+		->join(User::TABLE.' as user', 'news.user_id = user.id')
+		->join(Comment::TABLE.' as comment', 'news.id = comment.news_id', 'left')
+		->where('news.title', $title)
+		->group_by('news.id')
+		->limit(1)
+		->get();
+		
+		if($query->num_rows())
+		{
+			return $query->row();
+		}
+		
+		return FALSE;
+	}
+
+	// --------------------------------------------------------------------
 	// TODO: Continue model reworking ...
 	// --------------------------------------------------------------------
 	
@@ -89,18 +122,6 @@ class Blog extends CI_Model{
 			$this->db->where('id', $this->id);
 			$this->db->update('blog', $this); 				
 		}
-	}
-	
-	public function getComments($blog_id){
-		$this->db->select('comment.id, comment.comment, comment.update, user.name');
-		$this->db->from('comment');
-		$this->db->join('user', 'comment.user_id = user.id');
-		$this->db->where('comment.type_id',$blog_id);
-		$this->db->where('comment.type = "blog"');
-		$this->db->order_by('comment.update DESC');
-		$query = $this->db->get();
-	
-		return $query->result();
 	}
 	
 	public function getComment($id){
@@ -129,12 +150,11 @@ class Blog extends CI_Model{
 		
 	public function setComment(){
 		$this->db->set('comment', $this->input->post('comment'));
-		$this->db->set('user_id', $this->auth->getCurrentUserID());
-		$this->db->set('type', $this->input->post('type'));
-		$this->db->set('type_id', $this->input->post('id'));
+		$this->db->set('user_id', $this->auth->get_id());
+		$this->db->set('news_id', $this->input->post('id'));
 		$this->db->set('update', 'NOW()', FALSE);
 		$this->db->set('create', 'NOW()', FALSE);
-		$this->db->insert('comment');
+		$this->db->insert(Comment::TABLE);
 		
 		return $this->db->insert_id();
 	}

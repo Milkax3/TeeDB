@@ -33,7 +33,7 @@
 								from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
 							</p>
 							<br />
-							<p style="font-size: 10px">
+							<div style="font-size: 10px">
 								<span style="float:left; margin-top: 2px;">Like: </span>
 								<?php echo form_open('teedb/rates', array('class' => 'top'), array('type' => 'mod', 'id' => $entry->id, 'rate' => 1)); ?>
 									<span class="icon color icon204"></span>
@@ -41,7 +41,7 @@
 								<?php echo form_open('teedb/rates', array('class' => 'flop'), array('type' => 'mod', 'id' => $entry->id, 'rate' => 0)); ?>
 									<span class="icon color icon203"></span>
 								<?php echo form_close(); ?>
-							</p>
+							</div>
 							<br class="clear" />
 							<div class="rate">
 								<?php $prec = ($entry->rate_count > 0)? round($entry->rate_sum/$entry->rate_count)*90 : 50; ?>
@@ -53,10 +53,10 @@
 								</div>
 							</div>
 							<br />
-							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Server', 'style="font-size: 10px"'); ?>
-							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Client', 'style="font-size: 10px"'); ?>
+							<span class="mark">Server</span>
+							<span class="mark">Client</span>
 							<br/><br/>
-							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Visit / Docs', 'style="font-size: 10px"'); ?>						
+							<?php echo anchor(prep_url('ddrace.info'), 'Visit Mod-Site', 'style="font-size: 10px"'); ?>						
 						</div>
 					</li>
 					

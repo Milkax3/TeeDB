@@ -44,7 +44,7 @@
 		
 		<p>
 			Username:<br />
-			<span class="solid">foobar</span>
+			<span class="solid"><?php echo $this->auth->get_name(); ?></span>
 			<br /><br />
 			Email:<br />
 			<span class="solid">foo@bar.de</span>

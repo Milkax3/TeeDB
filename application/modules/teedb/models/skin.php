@@ -77,9 +77,9 @@ class Skin extends CI_Model {
 	 * @param integer offset
 	 * @param string order
 	 * @param string direction
-	 * @return string Skin name
+	 * @return db-objs Skins[ id, name, downloads, username, create ]
 	 */	
-	public function get_skins($limit, $offset='0', $order='update', $direction='DESC')
+	public function get_skins($limit, $offset='0', $order='create', $direction='DESC')
 	{
 		$query = $this->db
 		->select('skin.id, skin.name, skin.downloads, user.name AS username, skin.create')

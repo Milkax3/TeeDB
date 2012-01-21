@@ -14,11 +14,50 @@ class Comment extends CI_Model {
 	/**
 	 * Constructor
 	 */
-	function __construct()
-	{
+	function __construct(){
         parent::__construct();
 		
 		$this->load->database();
+		$this->load->model(array('user/user'));
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Count comments
+	 * 
+	 * @access public
+	 * @param integer blog id
+	 * @return integer
+	 */	
+	public function count_comments($blog_id)
+	{
+		return $this->db->where('news_id', $blog_id)->count_all(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get a all skins
+	 * 
+	 * @access public
+	 * @param integer blog id
+	 * @param integer limit
+	 * @param integer offset
+	 * @return string Skin name
+	 */		
+	public function get_comments($blog_id, $limit, $offset=0)
+	{
+		$query = $this->db
+		->select('comment.comment, comment.create, user.name')
+		->from(Comment::TABLE.' as comment')
+		->join(User::TABLE.' as user', 'comment.user_id = user.id')
+		->where('comment.news_id',$blog_id)
+		->order_by('comment.create DESC')
+		->limit($limit, $offset)
+		->get();
+	
+		return $query->result();
 	}
 
 	// --------------------------------------------------------------------

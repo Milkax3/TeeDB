@@ -32,7 +32,7 @@
 							from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
 						</p>
 						<br />
-						<p style="font-size: 10px">
+						<div style="font-size: 10px">
 							<span style="float:left; margin-top: 2px;">Like: </span>
 							<?php echo form_open('teedb/rates', array('class' => 'top'), array('type' => 'skin', 'id' => $entry->id, 'rate' => 1)); ?>
 								<span class="icon color icon204"></span>
@@ -40,7 +40,7 @@
 							<?php echo form_open('teedb/rates', array('class' => 'flop'), array('type' => 'skin', 'id' => $entry->id, 'rate' => 0)); ?>
 								<span class="icon color icon203"></span>
 							<?php echo form_close(); ?>
-						</p>
+						</div>
 						<br class="clear" />
 						<div class="rate">
 							<?php $prec = ($entry->rate_count > 0)? round($entry->rate_sum/$entry->rate_count)*90 : 50; ?>

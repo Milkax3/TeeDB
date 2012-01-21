@@ -1,18 +1,18 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * Comments Migration
+ * TeeDB Rates Migration
  *
  * @package		Application
  * @subpackage	Migrations
  * @category	Migrations
  * @author		Andreas Gehle
  */
-class Migration_Comments extends CI_Migration {
-	
+class Migration_Example_Datas extends CI_Migration {
+		
 	/**
 	 * Name of the table
 	 */	
-	const TABLE = 'comments';
+	const TABLE = 'teedb_rates';
 	
 	/**
 	 * Build table up
@@ -27,9 +27,10 @@ class Migration_Comments extends CI_Migration {
 			
 			$this->dbforge->add_field(array(
 				'id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE),
+				'type_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
+				'type' => array('type' => 'ENUM', 'constraint' => "'blog','user','skin','mapres','map','gameskin','mod','demo'", 'null' => FALSE),
 				'user_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
-				'comment' => array('type' => 'TEXT', 'null' => FALSE),
-				'news_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
+				'value' => array('type' => 'TINYINT', 'constraint' => 1, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
 				'update' => array('type' => 'DATETIME', 'null' => FALSE),
 				'create' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
@@ -47,5 +48,5 @@ class Migration_Comments extends CI_Migration {
 	}
 }
 
-/* End of file 005_comments.php */
-/* Location: ./application/migrations/005_comments.php */
+/* End of file 012_teedb_rates.php */
+/* Location: ./application/migrations/012_teedb_rates.php */

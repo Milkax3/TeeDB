@@ -34,9 +34,27 @@
 		<div id="list">
 			<ul id="<?php echo $type; ?>">
 				<?php foreach($skins as $entry): $entry->rate_sum = (int)$entry->rate_sum; ?>
-					<?php if($type == 'skins' OR true): ?>
+					<?php if($type == 'demos'): ?>
 					<li>
-						<img src="<?php echo base_url(); ?>uploads/skins/previews/<?php echo $entry->name; ?>.png" alt="Skin <?php echo $entry->name; ?>" />
+						<p><?php echo $entry->name; ?></p>
+						<br />
+						<?php echo anchor('teedb/myteedb/skin/'.url_title($entry->name), 'Change', 'style="font-size: 10px"'); ?>
+					</li>
+					<?php elseif($type == 'mods'): ?>
+					<li>
+						<p><?php echo $entry->name; ?></p>
+						<br />
+						<?php echo anchor('teedb/myteedb/skin/'.url_title($entry->name), 'Change', 'style="font-size: 10px"'); ?>
+					</li>
+					<?php elseif($type == 'maps'): ?>
+					<li>
+						<p><?php echo $entry->name; ?></p>
+						<br />
+						<?php echo anchor('teedb/myteedb/skin/'.url_title($entry->name), 'Change', 'style="font-size: 10px"'); ?>
+					</li>
+					<?php else: ?>
+					<li>
+						<img src="<?php echo base_url(); ?>uploads/<?php echo $type; ?>/previews/<?php echo $entry->name; ?>.png" alt="Skin <?php echo $entry->name; ?>" />
 						<p><?php echo $entry->name; ?></p>
 						<br />
 						<?php echo anchor('teedb/myteedb/skin/'.url_title($entry->name), 'Change', 'style="font-size: 10px"'); ?>

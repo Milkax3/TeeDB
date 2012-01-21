@@ -17,7 +17,7 @@ class Feed extends CI_Controller {
     {
         $data['encoding'] = 'utf-8';
         $data['feed_name'] = $this->template->header_data['title'];
-        $data['feed_url'] = base_url();
+        $data['feed_url'] = 'teedb.info';
         $data['page_description'] = $this->template->header_data['description'];
         $data['page_language'] = 'en-ca';
         $data['creator_email'] = 'support (at) site (dot) com';
