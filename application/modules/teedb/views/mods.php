@@ -56,7 +56,7 @@
 							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Server', 'style="font-size: 10px"'); ?>
 							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Client', 'style="font-size: 10px"'); ?>
 							<br/><br/>
-							<?php echo anchor('teedb/download/mod/'.url_title($entry->name), 'Visit / Docs', 'style="font-size: 10px"'); ?>						
+							<?php echo anchor(prep_url('teedb/download/mod/'.url_title($entry->name)), 'Visit / Docs', 'style="font-size: 10px"'); ?>						
 						</div>
 					</li>
 					

@@ -77,7 +77,7 @@ class MY_Form_validation extends CI_Form_validation {
 
 		list($table, $max) = explode(".", $params, 2);
 
-		$this->CI->db->select('user_id')->from($table)->order_by('create')->limit($max)->get();
+		$query = $this->CI->db->select('user_id')->from($table)->order_by('create')->limit($max)->get();
 
 		if ($query->num_rows() < $max)
 		{

@@ -9,7 +9,7 @@
 		
 		<ul class="light border float right">
 			<li><?php echo anchor('','main'); ?></li>
-			<li><?php echo anchor('news','news'); ?></li>
+			<li><?php echo anchor('blog/news','news'); ?></li>
 			<li><?php echo anchor('faq','faq'); ?></li>
 			<li><?php echo anchor('about','about'); ?></li>
 		</ul>

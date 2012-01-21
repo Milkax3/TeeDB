@@ -22,7 +22,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function demos($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'demo', $this->demo->count_my_demos());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'demo', $this->demo->count_my_demos());
 		
 		$data = array();
 		$data['skins'] = $this->demo->get_my_demos($limit, $from, $sort, $direction);
@@ -35,7 +35,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function gameskins($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'gameskin', $this->gameskin->count_my_gameskins());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'gameskin', $this->gameskin->count_my_gameskins());
 		
 		$data = array();
 		$data['skins'] = $this->gameskin->get_my_gameskins($limit, $from, $sort, $direction);
@@ -48,7 +48,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function mapres($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'mapres', $this->tileset->count_my_mapres());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'mapres', $this->tileset->count_my_mapres());
 		
 		$data = array();
 		$data['skins'] = $this->tileset->get_my_mapres($limit, $from, $sort, $direction);
@@ -61,7 +61,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function maps($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'map', $this->map->count_my_maps());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'map', $this->map->count_my_maps());
 		
 		$data = array();
 		$data['skins'] = $this->map->get_my_maps($limit, $from, $sort, $direction);
@@ -74,7 +74,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function mods($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'mod', $this->mod->count_my_mods());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'mod', $this->mod->count_my_mods());
 		
 		$data = array();
 		$data['skins'] = $this->mod->get_my_mods($limit, $from, $sort, $direction);
@@ -87,7 +87,7 @@ class MyTeeDB extends CI_Controller {
 	}
 
 	function skins($order='new', $direction='desc', $from=0){
-		list($limit, $sort) = $this->_sort(&$order, &$direction, &$from, 'skin', $this->skin->count_my_skins());
+		list($limit, $sort) = $this->_sort($order, $direction, $from, 'skin', $this->skin->count_my_skins());
 		
 		$data = array();
 		$data['skins'] = $this->skin->get_my_skins($limit, $from, $sort, $direction);
@@ -99,7 +99,7 @@ class MyTeeDB extends CI_Controller {
 		$this->template->view('myteedb', $data);
 	}
 	
-	function _sort($order='new', $direction='desc', $from=0, $type='skin', $count=0)
+	function _sort(&$order, &$direction, &$from, $type='skin', $count=0)
 	{
 		if($type == 'mod') $type = 'modi';
 		
@@ -123,7 +123,7 @@ class MyTeeDB extends CI_Controller {
 		}
 		
 		//Init pagination
-		$config['base_url'] = 'teedb/'.plural($type).'/index/'.$order.'/'.$direction;
+		$config['base_url'] = 'teedb/myteedb/'.plural($type).'/'.$order.'/'.$direction;
 		$config['total_rows'] = $count;
 		$config['per_page'] = 20;
 		$config['num_links'] = 5;

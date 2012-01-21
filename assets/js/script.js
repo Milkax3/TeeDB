@@ -135,3 +135,68 @@ $('form#upload button').click(function(){
 		}
 	});
 });
+
+//Ajax comment
+$('form#comment button').click(function(){
+	$('form#comment').ajaxSubmit({
+		type: 'POST',
+		url: 'blog/news/submit',
+    	dataType: 'json',
+		success: function(json){
+			//Clean old info
+			$('#info').html('');
+			//Write new info
+			if(json.error) {
+				for(var i in json.html)	{
+					$('#info').append(
+						'<p class="error color border"><span class="icon color icon100"></span>'+
+						json.html[i] +
+						'</p>'
+					);
+				}
+			}else{
+				$('#info').html(
+					'<p class="success color border"><span class="icon color icon101"></span>'+
+					json.html +
+					'</p>'
+				);
+				
+				$('#lister ul > br').first().after(
+					'<li style="height: 90px">'+
+						'<time style="padding:0;" datetime="'+ISODateString(new Date())+'">'+
+							'Today'+
+						'</time><br/>'+
+						'<span class="none solid">You</span>'+
+					'</li>'+
+					'<li style="width: 496px; margin-left:15px; text-align: left;">'+
+						$('textarea[name="comment"]').val()+
+					'</li>'+
+					'<br class="clear" />'
+				);
+				
+				$('textarea[name="comment"]').val('');
+			}
+			//Set new csrf
+			$('input[name="'+json.csrf_token_name+'"]').val(json.csrf_hash);
+		},
+		error: function(e){
+			$('#info').html(
+				'<p class="error color border"><span class="icon color icon100"></span>'+
+				e.responseText +
+				'</p>'
+			);
+		}
+	});
+});
+
+function ISODateString(d) {
+    function pad(n){
+        return n<10 ? '0'+n : n
+    }
+    return d.getUTCFullYear()+'-'
+    + pad(d.getUTCMonth()+1)+'-'
+    + pad(d.getUTCDate())+'T'
+    + pad(d.getUTCHours())+':'
+    + pad(d.getUTCMinutes())+':'
+    + pad(d.getUTCSeconds())+'Z'
+}
