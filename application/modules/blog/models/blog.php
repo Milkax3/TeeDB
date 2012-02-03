@@ -151,7 +151,12 @@ class Blog extends CI_Model{
 	public function setComment(){
 		$this->db->set('comment', $this->input->post('comment'));
 		$this->db->set('user_id', $this->auth->get_id());
+<<<<<<< HEAD
 		$this->db->set('news_id', $this->input->post('id'));
+=======
+		$this->db->set('type', 'blog');
+		$this->db->set('type_id', $this->input->post('id'));
+>>>>>>> origin/master
 		$this->db->set('update', 'NOW()', FALSE);
 		$this->db->set('create', 'NOW()', FALSE);
 		$this->db->insert(Comment::TABLE);
