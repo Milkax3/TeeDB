@@ -49,6 +49,35 @@ class Common extends CI_Model {
 	}
 
 	// --------------------------------------------------------------------
+	
+	/**
+	 * Get teedb stats for user
+	 * 
+	 * @access public
+	 * @param integer limit
+	 * @return db-obj
+	 */	
+	public function get_uploads($user_id)
+	{
+		$tables = array(Demo::TABLE, Gameskin::TABLE, Map::TABLE, Tileset::TABLE, Mod::TABLE, Skin::TABLE);
+		
+		foreach($tables as $table){		
+			$this->db
+				->select('count(*) AS count')
+				->from($table)
+				->where('user_id', $user_id);
+			$stats[$table] = $this->db->get()->row();
+		}
+
+		$uploads = 0;
+		foreach($stats as $stat){		
+			$uploads += $stat->count;
+		}
+		
+		return $uploads;
+	}
+
+	// --------------------------------------------------------------------
 	// TODO: Continue model reworking ...
 	// --------------------------------------------------------------------
 	

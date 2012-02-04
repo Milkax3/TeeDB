@@ -67,6 +67,45 @@ class User extends CI_Model {
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Change password
+	 * 
+	 * @access public
+	 * @param string user id
+	 * @param string new password hash
+	 * @return integer user id
+	 */
+	public function change_pass($id, $password)
+	{		
+		return $this->db
+		->set('password', $password)
+		->set('update', 'NOW()', FALSE)
+		->where('id', $id)
+		->update(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Change email
+	 * 
+	 * @access public
+	 * @param string user id
+	 * @param string new email
+	 * @return integer user id
+	 */
+	public function change_email($id, $email)
+	{		
+		return $this->db
+		->set('email', $email)
+		->set('update', 'NOW()', FALSE)
+		->where('id', $id)
+		->update(self::TABLE);
+	}
+	
+
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Login
 	 * 
 	 * @access public
@@ -175,6 +214,32 @@ class User extends CI_Model {
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Get the user email
+	 * 
+	 * @access public
+	 * @param integer user id
+	 * @return string user name
+	 */
+	public function get_email($user_id)
+	{
+		$query = $this->db
+		->select('email')
+		->where('id', $user_id)
+		->limit(1)
+		->get(self::TABLE);
+		
+		if ($query->num_rows())
+		{
+			$user = $query->row();
+			return $user->email;
+		}
+		
+		return '';
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Get user where id
 	 * 
 	 * @access public
@@ -196,6 +261,24 @@ class User extends CI_Model {
 		
 		return FALSE;
 	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get user where id
+	 * 
+	 * @access public
+	 * @param integer user id
+	 * @return db-obj user
+	 */
+	public function remove($user_id)
+	{
+		return $this->db
+		->where('id', $user_id)
+		->limit(1)
+		->delete(self::TABLE);
+	}
+	
 
 	// --------------------------------------------------------------------
 	

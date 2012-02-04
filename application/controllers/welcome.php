@@ -42,7 +42,10 @@ class Welcome extends CI_Controller {
 	{
 		$data['news_titles'] = $this->blog->get_latest_titles();
 		$data['news'] = $this->blog->get_latest(1);
-		$data['news'] = $data['news'][0];
+		
+		if(is_array($data['news']) && isset($data['news'][0])){			
+			$data['news'] =  $data['news'][0];
+		}
 		
 		//Calculate chartbar values
 		$data['stats'] = array();

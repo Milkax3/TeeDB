@@ -13,28 +13,81 @@ class Edit extends CI_Controller {
 		if($this->auth == NULL || !$this->auth->logged_in()) {
 			redirect('user/login');
 		}
+		
+		$this->load->model(array('user/user', 'teedb/common'));
 	}
 
-	public function index()
+	public function index($success = array())
 	{
-		$success = FALSE;
-		
-		if ($this->_submit_validate() === TRUE)
-		{
-			$success = TRUE;
-		}
-		
+		$data['email'] = $this->user->get_email($this->auth->get_id());
+		$data['uploads'] = $this->common->get_uploads($this->auth->get_id());
+		$data['success'] = $success;
+			
 		$this->template->set_subtitle('Edit profile');
-		$this->template->view('edit', array('success' => $success));
+		$this->template->view('edit', $data);
 	}
-
-	private function _submit_validate()
+	
+	public function pass()
+	{		
+		if ($this->_pass_validate() === TRUE)
+		{
+			$user_id = $this->user->change_pass(
+				$this->auth->get_id(),
+				$this->auth->get_hash($this->input->post('new_password'))
+			);
+			
+			return $this->index(array('pass' => TRUE));
+		}
+			
+		return $this->index(array('pass' => FALSE));
+		
+	}
+	
+	private function _pass_validate()
 	{
-				
-		$this->form_validation->set_rules('username', 'username', 'callback__not_logged_in|trim|required|callback__status|callback__authenticate');
-		$this->form_validation->set_rules('password', 'password', 'trim|required');
+		$this->form_validation->set_rules('new_password', 'password', 'required|min_length[6]|max_length[12]');
+		$this->form_validation->set_rules('passconf', 'confirm password', 'required|matches[new_password]');
 
 		return $this->form_validation->run();
+	}
+	
+	public function email()
+	{		
+		if ($this->_email_validate() === TRUE)
+		{
+			$user_id = $this->user->change_email(
+				$this->auth->get_id(),
+				$this->input->post('email')
+			);
+			
+			return $this->index(array('email' => TRUE));
+		}
+			
+		return $this->index(array('email' => FALSE));
+	}
+	
+	private function _email_validate()
+	{
+		$this->form_validation->set_rules('email', 'email', 'required|valid_email|unique[users.email]');
+
+		return $this->form_validation->run();
+	}
+	
+	public function del()
+	{		
+		if($this->input->post('delete'))
+		{
+			return $this->index(array('del' => TRUE));
+		}
+		
+		if ($this->input->post('delete2'))
+		{
+			$this->user->remove($this->auth->get_id());
+			$this->auth->logout();
+			return;
+		}
+
+		$this->index();
 	}
 	
 	function _status()
@@ -67,6 +120,8 @@ class Edit extends CI_Controller {
 		$this->form_validation->set_message('_not_logged_in', 'You are already logged in.');
 		return !$this->auth->logged_in();
 	}
+
+	
 }
 
 /* End of file login.php */
