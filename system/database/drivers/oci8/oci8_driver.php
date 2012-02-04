@@ -18,7 +18,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright   Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @copyright   Copyright (c) 2008 - 2012, EllisLab, Inc. (http://ellislab.com/)
  * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -148,7 +148,7 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	public function db_set_charset($charset, $collation)
 	{
-		// this is done upon connect
+		// @todo - add support if needed
 		return TRUE;
 	}
 
@@ -416,7 +416,6 @@ class CI_DB_oci8_driver extends CI_DB {
 		}
 
 		$str = remove_invisible_characters($str);
-		$str = str_replace("'", "''", $str);
 
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
@@ -661,11 +660,10 @@ class CI_DB_oci8_driver extends CI_DB {
 	 *
 	 * Generates a platform-specific insert string from the supplied data
 	 *
-	 * @access      protected
-	 * @param       string  the table name
-	 * @param       array   the insert keys
-	 * @param       array   the insert values
-	 * @return      string
+	 * @param	string  the table name
+	 * @param	array   the insert keys
+	 * @param 	array   the insert values
+	 * @return 	string
 	 */
 	protected function _insert_batch($table, $keys, $values)
 	{

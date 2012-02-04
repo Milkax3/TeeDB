@@ -1,13 +1,13 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
  * NOTICE OF LICENSE
- * 
+ *
  * Licensed under the Academic Free License version 3.0
- * 
+ *
  * This source file is subject to the Academic Free License (AFL 3.0) that is
  * bundled with this package in the files license_afl.txt / license_afl.rst.
  * It is also available through the world wide web at this URL:
@@ -21,22 +21,26 @@
  * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc. (http://ellislab.com/)
  * @license		http://opensource.org/licenses/AFL-3.0 Academic Free License (AFL 3.0)
  * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @since		Version 2.0
  * @filesource
  */
 
 /*
 | -------------------------------------------------------------------------
-| Hooks
+| Memcached settings
 | -------------------------------------------------------------------------
-| This file lets you define "hooks" to extend CI without hacking the core
-| files.  Please see the user guide for info:
+| Your Memcached servers can be specified below.
 |
-|	http://codeigniter.com/user_guide/general/hooks.html
+|	See: http://codeigniter.com/user_guide/libraries/caching.html#memcached
 |
 */
+$config = array(
+	'default' => array(
+		'hostname' => '127.0.0.1',
+		'port'     => '11211',
+		'weight'   => '1',
+	),
+);
 
-
-
-/* End of file hooks.php */
-/* Location: ./application/config/hooks.php */
+/* End of file memcached.php */
+/* Location: ./application/config/memcached.php */
