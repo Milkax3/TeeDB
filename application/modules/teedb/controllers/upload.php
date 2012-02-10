@@ -127,7 +127,6 @@ class Upload extends CI_Controller{
 				'size' => $files['size'][$i]
 			);
 		
-		
 			if (!$this->upload->do_upload('file')){
 				return $this->_error($this->upload->display_errors('', ''));
 			}else{			

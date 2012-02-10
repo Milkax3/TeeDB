@@ -162,8 +162,8 @@ $mimes = array('hqx'	=>	array('application/mac-binhex40', 'application/mac-binhe
 				'ogg'   =>	'audio/ogg',
 				'kmz'	=>	array('application/vnd.google-earth.kmz', 'application/zip', 'application/x-zip'),
 				'kml'	=>	array('application/vnd.google-earth.kml+xml', 'application/xml', 'text/xml'),
-				'map'	=>	'application/octet-stream',
-				'demo'	=>	'application/octet-stream'
+				'map'	=>	array('application/octet-stream', 'application/force-download'),
+				'demo'	=>	array('application/octet-stream', 'application/force-download')
 			);
 
 /* End of file mimes.php */
