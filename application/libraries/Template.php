@@ -148,6 +148,27 @@ class Template {
 	// --------------------------------------------------------------------	
 	
 	/**
+	 * Clear layouts
+	 */
+	public function clear_layout()
+	{
+		$this->layouts = array();
+		$this->layout_data = array();
+	}
+
+	// --------------------------------------------------------------------	
+	
+	/**
+	 * Set theme
+	 */
+	public function set_theme($theme)
+	{
+		$this->theme = $theme;
+	}
+
+	// --------------------------------------------------------------------	
+	
+	/**
 	 * Set Subtitle
 	 * 
 	 * Subtitle will be add to title
