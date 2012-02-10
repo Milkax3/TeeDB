@@ -2,11 +2,26 @@
 
 class Example extends CI_Controller {
 	
+	/**
+	 * Constructor
+	 */
+	function __construct()
+	{
+		parent::__construct();
+		
+		$this->load->library('template');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Temaplte example wirh Bootstrap 2.0
+	 */
+	
 	public function index()
 	{
-		$this->load->view('header', array('title' => 'Example page'));
-		$this->output->append_output('Welcome to CodeIgniter + Html5Boilerplate');
-		$this->load->view('footer');
+		$this->template->set_subtitle('Example');
+		$this->template->view('example');
 	}
 }
 
