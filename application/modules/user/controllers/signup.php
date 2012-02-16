@@ -96,7 +96,7 @@ class Signup extends CI_Controller {
 	private function _submit_validate()
 	{
 		// validation rules
-		$this->form_validation->set_rules('username', 'username', 'callback__not_logged_in|required|alpha_numeric|min_length[3]|max_length[12]|unique[users.name]');
+		$this->form_validation->set_rules('username', 'username', 'callback__not_logged_in|trim|required|alpha_numeric|min_length[3]|max_length[12]|unique[users.name]');
 		$this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[12]');
 		$this->form_validation->set_rules('passconf', 'confirm password', 'required|matches[password]');
 		$this->form_validation->set_rules('email', 'email', 'required|valid_email|unique[users.email]');
