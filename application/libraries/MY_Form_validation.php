@@ -8,6 +8,58 @@
  * @author		Andreas Gehle
  */
 class MY_Form_validation extends CI_Form_validation {
+ 
+    /**
+     * Error Array
+     *
+     * Returns the error messages as an array
+     *
+     * @return  array
+     */
+    function error_array()
+    {
+        if (count($this->_error_array) === 0)
+        {
+                return FALSE;
+        }
+        else
+            return $this->_error_array;
+ 
+    }
+    
+    // --------------------------------------------------------------------
+
+	/**
+	 * Validate URL
+	 * 
+	 * @access	public
+	 * @param	string URL
+	 * @return	bool
+	 */
+    public function valid_url($url)
+    {
+		$this->CI->form_validation->set_message('valid_url', 'The %s is not a valide URL.');
+		
+        $pattern = "/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i";
+        return (bool) preg_match($pattern, $url);
+    }
+    
+    // --------------------------------------------------------------------
+
+	/**
+	 * Check if website exist
+	 * 
+	 * @access	public
+	 * @param	string URL
+	 * @return	bool
+	 */
+    public function real_url($url)
+    {
+		$this->CI->form_validation->set_message('real_url', 'The page with the specified %s URL does not respond');
+		return @fsockopen("$url", 80, $errno, $errstr, 30); exit();
+    }
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Unique in table

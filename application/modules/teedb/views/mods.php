@@ -53,10 +53,14 @@
 								</div>
 							</div>
 							<br />
-							<span class="mark">Server</span>
-							<span class="mark">Client</span>
+							<?php if($entry->server): ?>
+								<span class="mark">Server</span>
+							<?php endif; ?>
+							<?php if($entry->client): ?>
+								<span class="mark">Client</span>
+							<?php endif; ?>
 							<br/><br/>
-							<?php echo anchor(prep_url('ddrace.info'), 'Visit Mod-Site', 'style="font-size: 10px"'); ?>						
+							<?php echo anchor($entry->link, 'Visit Mod-Site', 'style="font-size: 10px"'); ?>						
 						</div>
 					</li>
 					

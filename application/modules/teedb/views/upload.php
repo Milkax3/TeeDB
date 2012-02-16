@@ -42,10 +42,10 @@
 					<div style="float: left;width:323px; margin-left:20px;height: 46px">
 						<label for="has">Modified:</label><br />
 						<div style="width: 50%; float:left">
-							<?php echo form_checkbox('server',set_value('server')); ?> <span class="solid">Server</span>
+							<?php echo form_checkbox('server',set_value('server', 'server')); ?> <span class="solid">Server</span>
 						</div>
 						<div style="width: 50%; float:left">
-						<?php echo form_checkbox('client',set_value('client')); ?> <span class="solid">Client</span>
+						<?php echo form_checkbox('client',set_value('client', 'client')); ?> <span class="solid">Client</span>
 						</div>
 					</div>
 					<div style="float: left">
@@ -54,7 +54,7 @@
 					</div>
 					<div style="float: left;margin-left: 20px;width:333px;height: 46px">
 						<label for="file">Screenshot:</label><br />				
-						<?php echo form_upload('file[]', null, 'multiple'); ?>	
+						<?php echo form_upload('file'); ?>	
 					</div>
 				</div>
 			<?php endif; ?>

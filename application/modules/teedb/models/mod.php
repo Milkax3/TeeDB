@@ -50,7 +50,7 @@ class Mod extends CI_Model {
 	public function get_mods($limit, $offset='0', $order='update', $direction='DESC')
 	{
 		$query = $this->db
-		->select('modi.id, modi.name, modi.downloads, user.name AS username, modi.create')
+		->select('modi.id, modi.name, modi.link, modi.server, modi.client, modi.downloads, user.name AS username, modi.create')
 		->select('SUM(rate.value) AS rate_sum, COUNT(rate.user_id) AS rate_count')
 		->from(self::TABLE.' as modi')
 		->join(User::TABLE.' as user', 'modi.user_id = user.id')
@@ -113,17 +113,16 @@ class Mod extends CI_Model {
 
 	// --------------------------------------------------------------------
 	
-	public function setMod($name = null){
-		if(!$name and !$name = $this->input->post('name') or
-			!$this->auth and !$this->auth->logged_in()){
-			return false;
-		}
-		
-		$this->db->set('name', $name);
-		$this->db->set('user_id', $this->auth->get_id());
-		$this->db->set('update', 'NOW()', FALSE);
-		$this->db->set('create', 'NOW()', FALSE);
-		$this->db->insert(self::TABLE);
+	public function setMod($name, $link, $server=false, $client=false){
+		$this->db
+			->set('name', $name)
+			->set('link', $link)
+			->set('server', $server)
+			->set('client', $client)
+			->set('user_id', $this->auth->get_id())
+			->set('update', 'NOW()', FALSE)
+			->set('create', 'NOW()', FALSE)
+			->insert(self::TABLE);
 		
 		return $this->db->insert_id();
 	}

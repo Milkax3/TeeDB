@@ -8,6 +8,7 @@ class Upload extends CI_Controller{
 		
 		$this->load->helper('inflector');
 		$this->load->config('teedb/teedb');
+		$this->load->library('form_validation');
 	}
 	
 	public function index($type='skins')
@@ -47,14 +48,7 @@ class Upload extends CI_Controller{
 	}
 	
 	function submit()
-	{
-		//var_dump($_FILES['file']['type'][0]);
-		//return $this->_error('From '.$_FILES['file']['type'][0].' to '.preg_replace("/^(.+?);.*$/", "\\1", $_FILES['file']['type'][0]).' !');
-		
-		if($form_errors = validation_errors('','')) {
-			return $this->_error($form_errors);	
-		}
-		
+	{		
 		if(!$this->input->post('type')) {
 			return $this->_error('No type given.');
 		} else {
@@ -105,6 +99,22 @@ class Upload extends CI_Controller{
 				$config['allowed_types'] = 'demo';
 				$config['max_size']	= '10000'; //10MB
 			break;
+			case 'mods':
+				$this->load->model('teedb/mod');
+				$this->load->library('image_lib');
+				$config['upload_path'] = './'.$this->config->item('upload_path_mods');
+				$config['encrypt_name']  = TRUE;
+				$config['allowed_types'] = 'png';
+				$config['max_size']	= '1000'; //1MB
+				$config['min_width']  = '150';
+				$config['min_height']  = '150';
+				
+				$this->form_validation->set_rules('modname', 'modname', 'required|alpha_numeric|min_length[3]|max_length[12]|unique[teedb_mods.name]');
+				$this->form_validation->set_rules('link', 'link', 'trim|required|prep_url|valid_url');
+
+				$this->form_validation->run();
+				
+			break;
 			default: 
 				return $this->_error('Type incorret.');
 		}
@@ -112,20 +122,31 @@ class Upload extends CI_Controller{
 		if(!$this->auth->logged_in()){
 			return $this->_error('You have to login.');
 		}
+
+		if($form_errors = $this->form_validation->error_array()) {
+			return $this->_error($form_errors);	
+		}
 		
 		$this->load->library('upload', $config);
 		
 		$files = $_FILES['file'];
+		$switch_array = false;
+		if(is_array($_FILES['file']['name'])){
+			$switch_array = true;
+		}
 		$uploads = array();
+		
 		for($i = 0, $count = count($files['name']); $i < $count; $i++) {
-			unset($_FILES['file']);
-			$_FILES['file'] = array(
-				'name' => $files['name'][$i], 
-				'type' => $files['type'][$i], 
-				'tmp_name' => $files['tmp_name'][$i], 
-				'error' => $files['error'][$i], 
-				'size' => $files['size'][$i]
-			);
+			if($switch_array){
+				unset($_FILES['file']);
+				$_FILES['file'] = array(
+					'name' => $files['name'][$i], 
+					'type' => $files['type'][$i], 
+					'tmp_name' => $files['tmp_name'][$i], 
+					'error' => $files['error'][$i], 
+					'size' => $files['size'][$i]
+				);
+			}
 		
 			if (!$this->upload->do_upload('file')){
 				return $this->_error($this->upload->display_errors('', ''));
@@ -173,6 +194,26 @@ class Upload extends CI_Controller{
 					//$this->demo_reader->getMap($data['file_name']);
 					//$data['preview'] = base_url().($this->config->item('upload_path_maps')).'/previews/'.$data['raw_name'].'.png';
 					$this->demo->setDemo($data['raw_name']);
+				}elseif($type == 'mods'){
+					$configResize['source_image'] = $data['full_path'];
+					$configResize['new_image'] = $config['upload_path'].'/'.$this->input->post('modname').'.png';
+					$configResize['width'] = $config['min_width'];
+					$configResize['height'] = $config['min_height'];
+					
+					$this->image_lib->initialize($configResize);
+					if(!$this->image_lib->resize()){
+						return $this->_error($this->image_lib->display_errors('', ''));
+					}
+					$this->image_lib->clear();
+					$data['preview'] = base_url($configResize['new_image']);
+					
+					$this->mod->setMod(
+						$this->input->post('modname'),
+						$this->input->post('link'),
+						(bool) $this->input->post('server'),
+						(bool) $this->input->post('client')
+					);
+					unlink($data['full_path']);
 				}
 				$uploads[] = $data;
 			}
