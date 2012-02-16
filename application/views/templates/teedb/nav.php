@@ -60,10 +60,10 @@
 						<?php echo form_open('user/login'); ?>
 							<p>
 								<label for="username">Username:</label><br />
-								<?php echo form_input('username',set_value('username'),'id="loginName"'); ?>
+								<?php echo form_input('username',set_value('username'),'id="username"'); ?>
 								<br /><br />
 								<label for="password">Password:</label><br />
-								<?php echo form_password('password'); ?>
+								<?php echo form_password('password', null, 'id="password"'); ?>
 								<br /><br /><br />
 								<?php echo form_submit('submit','Login'); ?><br />
 							</p>
