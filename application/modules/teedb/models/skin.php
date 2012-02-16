@@ -161,6 +161,44 @@ class Skin extends CI_Model {
 		
 		return $this->db->insert_id();
 	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Change skinname
+	 * 
+	 * @access public
+	 * @param string skin id
+	 * @param string skin name
+	 * @return integer user id
+	 */
+	public function change_name($id, $name)
+	{		
+		return $this->db
+		->set('name', $name)
+		->set('update', 'NOW()', FALSE)
+		->where('id', $id)
+		->update(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Remove skin
+	 * 
+	 * @access public
+	 * @param integer user id
+	 * @return db-obj user
+	 */
+	public function remove($id)
+	{
+		return $this->db
+		->where('id', $id)
+		->limit(1)
+		->delete(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
 	
 	public function getUserSkins($limit, $name, $offset='0', $order='skin.update', $direction='DESC')
 	{
@@ -275,12 +313,12 @@ class Skin extends CI_Model {
 		return $query->num_rows();
 	}
 	
-	public function getName($id)
+	public function get_name($id)
 	{
-		$this->db->select('name');
-		$this->db->from('teedb_skin');
-		$this->db->where('id', $id);
-		$query = $this->db->get();
+		$query = $this->db
+		->select('name')
+		->where('id', $id)
+		->get(self::TABLE);
 		
 		return $query->row()->name;
 	}	

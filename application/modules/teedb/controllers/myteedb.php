@@ -15,6 +15,8 @@ class MyTeeDB extends CI_Controller {
 		$this->load->library(array('pagination','form_validation'));
 		$this->load->helper(array('rate','inflector'));
 		$this->load->model(array('teedb/skin', 'teedb/mod', 'teedb/gameskin', 'teedb/tileset', 'teedb/demo', 'teedb/map'));
+		
+		$this->load->config('teedb/teedb');
 	}
 	
 	function index(){
@@ -86,17 +88,54 @@ class MyTeeDB extends CI_Controller {
 		$this->template->view('myteedb', $data);
 	}
 
-	function skins($order='new', $direction='desc', $from=0){
+	function skins($order='new', $direction='desc', $from=0)
+	{
+		$data = array();
+		
+		if($this->input->post('change') && $this->_name_validate('skinname', 'teedb_skins') === TRUE)
+		{			
+			$old_skinname = $this->skin->get_name($this->input->post('id'));
+			
+			$this->skin->change_name(
+				$this->input->post('id'), 
+				$this->input->post('skinname')
+			);
+			
+			rename(
+				$this->config->item('upload_path_skins').'/'.$old_skinname.'.png',
+				$this->config->item('upload_path_skins').'/'.$this->input->post('skinname').'.png'
+			);
+			rename(
+				$this->config->item('upload_path_skins').'/previews/'.$old_skinname.'.png',
+				$this->config->item('upload_path_skins').'/previews/'.$this->input->post('skinname').'.png'
+			);
+			
+			$data['changed'] = $old_skinname;
+		}
+		
+		if($this->input->post('delete'))
+		{			
+			$skinname = $this->skin->get_name($this->input->post('id'));
+			$data['delete'] = $skinname;
+		}
+		
+		if($this->input->post('delete2'))
+		{
+			$skinname = $this->skin->get_name($this->input->post('id'));
+			$this->skin->remove($this->input->post('id'));
+			unlink($this->config->item('upload_path_skins').'/'.$skinname.'.png');
+			unlink($this->config->item('upload_path_skins').'/previews/'.$skinname.'.png');
+		}
+		
 		list($limit, $sort) = $this->_sort($order, $direction, $from, 'skin', $this->skin->count_my_skins());
 		
-		$data = array();
 		$data['skins'] = $this->skin->get_my_skins($limit, $from, $sort, $direction);
 		$data['direction'] = $direction;
 		$data['order'] = $order;
 		$data['type'] = 'skins';
 		
-		$this->template->set_subtitle('MyTeeDB');
-		$this->template->view('myteedb', $data);
+		$this->template->set_subtitle('My Skins');
+		$this->template->view('skins_edit', $data);
 	}
 	
 	function _sort(&$order, &$direction, &$from, $type='skin', $count=0)
@@ -143,6 +182,14 @@ class MyTeeDB extends CI_Controller {
 		}
 		
 		return array($limit, $sort);
+	}
+
+	private function _name_validate($input, $type)
+	{
+		$this->form_validation->set_rules('id', 'skin-ID', 'trim|required|is_natural_no_zero');
+		$this->form_validation->set_rules($input, $input, 'trim|required|alpha_numeric|min_length[3]|max_length[32]|unique['.$type.'.name]');
+
+		return $this->form_validation->run();
 	}
 }
 
