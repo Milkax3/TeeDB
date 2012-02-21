@@ -25,6 +25,19 @@ class Demo extends CI_Model {
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Tablename
+	 * 
+	 * @access public
+	 * @return integer
+	 */	
+	public function get_table()
+	{
+		return self::TABLE;
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Count demos
 	 * 
 	 * @access public
@@ -126,6 +139,54 @@ class Demo extends CI_Model {
 		
 		return $this->db->insert_id();
 	}
+	
+	public function get_name($id)
+	{
+		$query = $this->db
+		->select('name')
+		->where('id', $id)
+		->get(self::TABLE);
+		
+		return $query->row()->name;
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Change skinname
+	 * 
+	 * @access public
+	 * @param string skin id
+	 * @param string skin name
+	 * @return integer user id
+	 */
+	public function change_name($id, $name)
+	{		
+		return $this->db
+		->set('name', $name)
+		->set('update', 'NOW()', FALSE)
+		->where('id', $id)
+		->update(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Remove skin
+	 * 
+	 * @access public
+	 * @param integer user id
+	 * @return db-obj user
+	 */
+	public function remove($id)
+	{
+		return $this->db
+		->where('id', $id)
+		->limit(1)
+		->delete(self::TABLE);
+	}
+
+	// --------------------------------------------------------------------
 }
 
 /* End of file: demo.php */

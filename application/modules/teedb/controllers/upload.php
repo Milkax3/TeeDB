@@ -106,8 +106,8 @@ class Upload extends CI_Controller{
 				$config['encrypt_name']  = TRUE;
 				$config['allowed_types'] = 'png';
 				$config['max_size']	= '1000'; //1MB
-				$config['min_width']  = '150';
-				$config['min_height']  = '150';
+				$config['min_width']  = '180';
+				$config['min_height']  = '180';
 				
 				$this->form_validation->set_rules('modname', 'modname', 'required|alpha_numeric|min_length[3]|max_length[12]|unique[teedb_mods.name]');
 				$this->form_validation->set_rules('link', 'link', 'trim|required|prep_url|valid_url');

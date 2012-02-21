@@ -25,6 +25,19 @@ class Skin extends CI_Model {
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Tablename
+	 * 
+	 * @access public
+	 * @return integer
+	 */	
+	public function get_table()
+	{
+		return self::TABLE;
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Count skins
 	 * 
 	 * @access public
