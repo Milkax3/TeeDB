@@ -113,7 +113,7 @@ $('form#upload button').click(function(){
 					$('#list > ul').append(
 						'<li>'+
 							'<div style="width:110px; height:64px">'+
-								'<img src="'+json.uploads[i].preview+'" href="'+json.uploads[i].raw_name+' preview" />'+
+								'<img src="'+json.uploads[i].preview+'" href="'+json.uploads[i].raw_name+' preview" width="64" height="64" />'+
 							'</div>'+
 							'<p>'+
 								json.uploads[i].raw_name +

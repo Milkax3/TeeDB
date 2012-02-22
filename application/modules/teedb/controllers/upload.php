@@ -192,7 +192,7 @@ class Upload extends CI_Controller{
 					$this->map->setMap($data['raw_name']);
 				}elseif($type == 'demos'){
 					//$this->demo_reader->getMap($data['file_name']);
-					//$data['preview'] = base_url().($this->config->item('upload_path_maps')).'/previews/'.$data['raw_name'].'.png';
+					$data['preview'] = base_url('assets/images/nopic_demo.png');
 					$this->demo->setDemo($data['raw_name']);
 				}elseif($type == 'mods'){
 					$configResize['source_image'] = $data['full_path'];
@@ -206,6 +206,7 @@ class Upload extends CI_Controller{
 					}
 					$this->image_lib->clear();
 					$data['preview'] = base_url($configResize['new_image']);
+					$data['raw_name'] = $this->input->post('modname');
 					
 					$this->mod->setMod(
 						$this->input->post('modname'),
