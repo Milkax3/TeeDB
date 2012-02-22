@@ -33,7 +33,7 @@
 					<ul>
 						<li>
 							<span class="icon color icon145"></span>
-							Posted by <?php echo anchor('user/'.url_title($entry->name), $entry->name, 'class="none"'); ?>
+							Posted by <?php echo anchor('#user/'.url_title($entry->name), $entry->name, 'class="none"'); ?>
 						</li>
 						<li>
 							<span class="icon color icon42"></span>

@@ -28,7 +28,7 @@
 					<li>
 						<p><?php echo $entry->name; ?></p>
 						<p style="font-size: 10px">
-							from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
+							from <?php echo anchor('teedb/demos#profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
 						</p>
 						<br />
 						<div style="font-size: 10px">

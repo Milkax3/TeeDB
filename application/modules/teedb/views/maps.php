@@ -32,7 +32,7 @@
 						
 						<p style="padding-top:5px"><?php echo $entry->name; ?></p>
 						<p style="padding-bottom:5px; font-size: 10px">
-							from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
+							from <?php echo anchor('teedb/maps#profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
 						</p>
 						
 						<div style="float:left;">
