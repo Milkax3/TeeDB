@@ -147,7 +147,7 @@
 		<p>
 			<b>Last-User:</b> 
 			<?php if(isset($last_user) and $last_user): ?>
-			<?php echo anchor('/profile/name/'.$last_user->name ,$last_user->name, 'class="none solid"').' ('.datetime_to_human($last_user->create).')'; ?><br>
+			<?php echo anchor('#/profile/name/'.$last_user->name ,$last_user->name, 'class="none solid"').' ('.datetime_to_human($last_user->create).')'; ?><br>
 			<?php else: ?>
 			No user signup, yet.<br />
 	   		<?php endif; ?>
