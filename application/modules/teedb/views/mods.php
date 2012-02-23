@@ -60,7 +60,7 @@
 								<span class="mark">Client</span>
 							<?php endif; ?>
 							<br/><br/>
-							<?php echo anchor($entry->link, 'Visit Mod-Site', 'style="font-size: 10px"'); ?>						
+							<?php echo anchor($entry->link, 'Visit Mod-Site', 'target="_blank" style="font-size: 10px"'); ?>						
 						</div>
 					</li>
 					
