@@ -27,7 +27,7 @@
 			);
 		?>
 		
-		<?php echo form_open('user/lostpw/submit'); ?>
+		<?php echo form_open('user/lostpw'); ?>
 			<p>
 				<label for="password">Email:</label><br />
 				<?php echo form_input('email',set_value('email'), 'id="email"'); ?>

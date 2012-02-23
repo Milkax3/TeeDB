@@ -33,14 +33,14 @@ class Confirm extends CI_Model {
 	 */
 	private function _get_random_link()
 	{
-		$new_link = $this->string->random_string('unique');
+		$new_link = random_string('unique');
 		
 		$query = $this->db
 		->select('id')
 		->where('link', $new_link)
 		->get(self::TABLE);
 		
-		if ($query->num_rows())
+		if (!$query->num_rows())
 		{
 			return $new_link;
 		}
@@ -80,12 +80,12 @@ class Confirm extends CI_Model {
 	 * @param string user name
 	 * @return string hash link
 	 */
-	public function get_signup_link($username)
+	public function get_signup_link($email)
 	{
 		$this->db
 		->select('link')
 		->join(User::TABLE, 'user_id = '.User::TABLE.'.id')
-		->where('name', $username)
+		->where('email', $email)
 		->where('password IS NULL')
 		->get(self::TABLE);
 		
@@ -161,7 +161,7 @@ class Confirm extends CI_Model {
 			$confirm_set = $query->row();
 			
 			//Set new password
-			if($confirm_set->password == NULL){
+			if(!is_null($confirm_set->password)){
 				$this->db
 				->set('password', $confirm_set->password)
 				->set('update', 'NOW()', FALSE)

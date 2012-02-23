@@ -179,7 +179,7 @@ class User extends CI_Model {
 		if ($query->num_rows())
 		{
 			$user = $query->row();
-			return $user->status;
+			return (int) $user->status;
 		}
 		
 		return FALSE;
@@ -210,6 +210,33 @@ class User extends CI_Model {
 		
 		return '';
 	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get the user name
+	 * 
+	 * @access public
+	 * @param integer user id
+	 * @return string user name
+	 */
+	public function get_name_by_mail($email)
+	{
+		$query = $this->db
+		->select('name')
+		->where('email', $email)
+		->limit(1)
+		->get(self::TABLE);
+		
+		if ($query->num_rows())
+		{
+			$user = $query->row();
+			return $user->name;
+		}
+		
+		return FALSE;
+	}
+	
 
 	// --------------------------------------------------------------------
 	

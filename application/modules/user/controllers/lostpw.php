@@ -21,7 +21,7 @@ class LostPw extends CI_Controller {
 		
 		if ($this->_submit_validate() === TRUE)
 		{
-			$password = $this->string->random_string('alnum');
+			$password = random_string('alnum');
 			list($username, $hash) = $this->confirm->add_password_link($this->input->post('email'), $this->auth->get_hash($password));
 			
 			$this->email->from($this->config->item('email'), 'TeeDB - Teeworlds database');
@@ -69,27 +69,31 @@ class LostPw extends CI_Controller {
 	private function _submit_validate()
 	{
 		$this->form_validation->set_rules('email', 'email', 'callback__not_logged_in|callback__status|required|valid_email|exist[users.email]');
-		$this->form_validation->set_message('authenticate','Invalid login. Please try again.');
 
 		return $this->form_validation->run();
 	}
 	
-	function _status()
+	function _status($str)
 	{
 		$status = $this->user->get_status($this->input->post('username'));
 		
 		if($status === User::STATUS_DEACTIVE)
 		{
-			$this->form_validation->set_message('_activate','Activate your account first. Click '.anchor('user/signup/resend', 'here').' if you want to send the activation mail again.');
+			$this->form_validation->set_message('_status','Activate your account first. Click '.anchor('user/signup/resend/'.$str, 'here').' if you want to send the activation mail again.');
 			return FALSE;
 		}
 		elseif($status === User::STATUS_BANNED)
 		{
-			$this->form_validation->set_message('_not_banned','Invalid action. The Account has been banned.');
+			$this->form_validation->set_message('_status','Invalid action. The Account has been banned.');
 			return FALSE;
 		}
+		elseif($status === User::STATUS_ACTIVE)
+		{
+			return TRUE;
+		}
 		
-		return TRUE;
+		$this->form_validation->set_message('_status','Invalid account status. Status is '.$status);
+		return FALSE;
 	}
 	
 	function _not_logged_in()

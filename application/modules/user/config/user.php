@@ -41,7 +41,7 @@ $config['upload_path_avatars'] = 'uploads/avatars/';
 |
 */
 
-$config['email'] = 'no-reply@teedb.info';
+$config['email'] = 'webmaster@mg-buero.de';
 
 /* End of file user.php */
 /* Location: ./application/modules/user/config/user.php */

@@ -28,6 +28,7 @@ class Signup extends CI_Controller {
 			{
 				$this->_send_mail(
 					$this->input->post('username'), 
+					$this->input->post('email'),
 					$this->confirm->add_signup_link($user_id), 
 					$this->input->post('password')
 				);
@@ -39,23 +40,23 @@ class Signup extends CI_Controller {
 		$this->template->view('signup', array('success' => $success));
 	}
 
-	public function resend($username)
+	public function resend($email)
 	{
-		if($link = $this->confirm->get_signup_link($username))
-		{			
-			$this->_send_mail($username, $link);
-			show_error('Confirm link resend to user '.$username.'.');
+		if($link = $this->confirm->get_signup_link($email) && $username = $this->user->get_name_by_mail($email))
+		{
+			$this->_send_mail($username, $email, $link);
+			show_error('Confirm link resend to '.url_title($email).'.');
 		}
 		else
 		{
-			show_error('Invalid username or account already activated.');
+			show_error('Invalid email or account already activated.');
 		}
 	}
 	
-	private function _send_mail($username, $link, $password = NULL)
+	private function _send_mail($username, $email, $link, $password = NULL)
 	{
 		$this->email->from($this->config->item('email'), 'TeeDB - Teeworlds database');
-		$this->email->to($this->input->post('email'));
+		$this->email->to($email);
 		
 		$this->email->subject('TeeDB - Confirm signup');
 		$this->email->message('
@@ -67,7 +68,7 @@ class Signup extends CI_Controller {
 			
 			With the following link you can activate your created account on teedb.info.
 			
-			Confirm link: http://teedb.info/signup/confirm/'.$link.'
+			Confirm link: {unwrap}'.base_url('user/signup/confirm/'.$link).'{/unwrap}
 			
 			Username: '.$username.'
 			Password: '.( ($password != NULL)? $password : 'Password can not be displayed.').'
@@ -77,7 +78,10 @@ class Signup extends CI_Controller {
 			TeeDB
 		');
 		
-		$this->email->send();
+		if(!$this->email->send()){
+			$this->email->print_debugger();
+			exit();
+		}
 	}
 
 	public function confirm($link)
@@ -88,7 +92,7 @@ class Signup extends CI_Controller {
 		}
 		else
 		{
-			show_error('Activation successful. You can now log in.');
+			$this->output->set_output('Activation successful. You can now log in.');
 			redirect('user/login');
 		}
 	}
