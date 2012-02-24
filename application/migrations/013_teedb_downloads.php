@@ -7,12 +7,12 @@
  * @category	Migrations
  * @author		Andreas Gehle
  */
-class Migration_TeeDB_Rates extends CI_Migration {
+class Migration_TeeDB_Downloads extends CI_Migration {
 		
 	/**
 	 * Name of the table
 	 */	
-	const TABLE = 'teedb_rates';
+	const TABLE = 'teedb_downloads';
 	
 	/**
 	 * Build table up
@@ -23,16 +23,13 @@ class Migration_TeeDB_Rates extends CI_Migration {
 		{
 			// Setup Keys
 			$this->dbforge->add_key('id', TRUE);
-			$this->dbforge->add_key('user_id');
 			
 			$this->dbforge->add_field(array(
 				'id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE),
 				'type_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
-				'type' => array('type' => 'ENUM', 'constraint' => "'user','skin','mapres','map','gameskin','mod','demo'", 'null' => FALSE),
-				'user_id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
-				'value' => array('type' => 'TINYINT', 'constraint' => 1, 'unsigned' => TRUE, 'null' => FALSE, 'default' => 0),
-				'update' => array('type' => 'DATETIME', 'null' => FALSE),
-				'create' => array('type' => 'DATETIME', 'null' => FALSE)
+				'type' => array('type' => 'ENUM', 'constraint' => "'skin','mapres','map','gameskin','mod','demo'", 'null' => FALSE),
+				'ip' => array('type' => 'BIGINT', 'constraint' => 10, 'unsigned' => TRUE, 'null' => FALSE),
+				'date' => array('type' => 'DATETIME', 'null' => FALSE)
 			));
 
 			$this->dbforge->create_table(self::TABLE, TRUE);

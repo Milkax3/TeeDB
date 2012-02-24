@@ -30,7 +30,7 @@
 						<div style="float:left; padding-left:16px;">
 							<p><?php echo $entry->name; ?></p>
 							<p style="font-size: 10px">
-								from <?php echo anchor('profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
+								from <?php echo anchor('teedb/mods#profile/name/'.url_title($entry->username), $entry->username, 'class="none solid"'); ?>
 							</p>
 							<br />
 							<div style="font-size: 10px">
@@ -60,7 +60,7 @@
 								<span class="mark">Client</span>
 							<?php endif; ?>
 							<br/><br/>
-							<?php echo anchor($entry->link, 'Visit Mod-Site', 'style="font-size: 10px"'); ?>						
+							<?php echo anchor($entry->link, 'Visit Mod-Site', 'target="_blank" style="font-size: 10px"'); ?>						
 						</div>
 					</li>
 					

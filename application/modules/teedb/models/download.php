@@ -31,33 +31,35 @@ class Download extends CI_Model {
 	 * @param string Name for the entry
 	 * @return boolean
 	 */	
-	public function increment($type, $name)
+	public function increment($type, $table, $name)
 	{
 		$ip = $this->input->ip_address();
 		
 		$query = $this->db
-		->select($type.'.id, '.$type.'.downloads, download.ip', FALSE)
-		->from($type)
-		->join('download', $type.'.id = download.type_id AND download.ip = '.ip2long($ip), 'left')
-		->where('name', $name)
+		->select('dw_type.id, dw_type.downloads, dw.ip', FALSE)
+		->from($table->get_table().' as dw_type')
+		->join(self::TABLE.' as dw', 'dw_type.id = dw.type_id AND dw.type = "'.$type.'" AND dw.ip = '.ip2long($ip), 'left')
+		->where('dw_type.name', $name)
 		->limit(1)
-		->get(self::TABLE);
+		->get();
 		
 		if($query->num_rows()){
 			$dw = $query->row();
 			
 			if(!isset($dw->ip)){
 				$dowloads = $dw->downloads + 1;
-				$this->db->set('downloads', $dowloads);
-				$this->db->where('name', $name);
-				$this->db->update($type);
+				$this->db
+				->set('downloads', $dowloads)
+				->where('name', $name)
+				->update($table->get_table());
 				
 				if($ip != '0.0.0.0'){
-					$this->db->set('type_id', $dw->id);
-					$this->db->set('type', $type);
-					$this->db->set('ip', ip2long($ip));
-					$this->db->set('date', 'NOW()', FALSE);
-					$this->db->insert('download');
+					$this->db
+					->set('type_id', $dw->id)
+					->set('type', $type)
+					->set('ip', ip2long($ip))
+					->set('date', 'NOW()', FALSE)
+					->insert(self::TABLE);
 				}
 				return TRUE;
 			}

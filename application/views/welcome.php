@@ -33,7 +33,7 @@
 				<ul>
 					<li>
 						<span class="icon color icon145"></span>
-						Posted by <?php echo anchor('user/'.url_title($news->name), $news->name, 'class="none"'); ?>
+						Posted by <?php echo anchor('#user/'.url_title($news->name), $news->name, 'class="none"'); ?>
 					</li>
 					<li>
 						<span class="icon color icon42"></span>
@@ -147,7 +147,7 @@
 		<p>
 			<b>Last-User:</b> 
 			<?php if(isset($last_user) and $last_user): ?>
-			<?php echo anchor('/profile/name/'.$last_user->name ,$last_user->name, 'class="none solid"').' ('.datetime_to_human($last_user->create).')'; ?><br>
+			<?php echo anchor('#/profile/name/'.$last_user->name ,$last_user->name, 'class="none solid"').' ('.datetime_to_human($last_user->create).')'; ?><br>
 			<?php else: ?>
 			No user signup, yet.<br />
 	   		<?php endif; ?>
